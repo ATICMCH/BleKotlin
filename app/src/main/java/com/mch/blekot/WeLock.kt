@@ -2,6 +2,8 @@ package com.mch.blekot
 
 import android.util.Log
 import okhttp3.*
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 import java.util.*
 
@@ -15,6 +17,7 @@ class WeLock(
     private val urlWeLock = "https://api.we-lock.com"
     private val PATH_CARD = "/API/Device/DeviceCardCommand"
     private val PATH_CODE = "/API/Device/DeviceSetTemporaryPassword"
+    private val PATH_CODE_DELETE = "/API/Device/DeviceDeleteTemporaryPassword"
     private val PATH_OPEN = "/API/Device/DeviceUnLockCommand"
     private val PATH_TOKEN = "/API/Auth/Token"
 
@@ -31,26 +34,39 @@ class WeLock(
         val endDate: Int = startDate + 86400
 
 
+        // deviceNumber: "21471618"
+        // deviceBleName: "WeLockAWPOR"
         val openLockJson = """{
             appID: "WELOCK2202161033", 
-            deviceNumber: "21471618", 
-            deviceBleName: "WeLockAWPOR", 
+            deviceNumber: "21471175", 
+            deviceBleName: "WeLockE31J8", 
             devicePower: "$mDevicePower", 
             deviceRandomFactor: "$mRndNumber"}
             """.trimIndent()
 
         val newCodeJson = """{
             appID: "WELOCK2202161033", 
-            deviceNumber: "21471618", 
-            deviceBleName: "WeLockAWPOR", 
-            devicePower: "$mDevicePower", 
+            deviceNumber: "21471175", 
+            deviceBleName: "WeLockE31J8",
             deviceRandomFactor: "$mRndNumber", 
             password: $mCode, 
             index: 20, 
             user: 15, 
-            times: 65000, 
+            times: 5, 
             startTimestamp: $startDate, 
             endTimestamp: $endDate}
+        """.trimIndent()
+
+        //times: 65000,
+
+        val newCodeJson1 = """{
+            appID: "WELOCK2202161033", 
+            deviceNumber: "21471175", 
+            deviceBleName: "WeLockE31J8",
+            deviceRandomFactor: "$mRndNumber",
+            cardID: "M821110010778", 
+            cardQr: "https://download.we-lock.com/app/dl/2/a666a500a8267e82", 
+            type: 1}
         """.trimIndent()
 
 
@@ -64,13 +80,20 @@ class WeLock(
                 actionCallback
             )
             "newCode" -> {
-                Log.i("Json", newCodeJson)
+                Log.i("Json", newCodeJson1)
+
+                postWithToken(
+                    PATH_CARD,
+                    newCodeJson1,
+                    actionCallback
+                )
+                /*Log.i("Json", newCodeJson)
 
                 postWithToken(
                     PATH_CODE,
                     newCodeJson,
                     actionCallback
-                )
+                )*/
             }
 
         }
@@ -118,11 +141,46 @@ class WeLock(
         }
 
         override fun onResponse(p0: Call, response: Response) {
-            val res = response.body()?.string()?.split("\"")?.get(3)
-            Log.i("Action", "onResponse: $res")
-            if (res != null) {
-                ble.startBle(code = res)
+            var str_response = response.body()?.string()?.trim();
+            //val res = response.body()?.string()?.split("\"")?.get(3)
+            //Log.i("Action", "onResponse: $res")
+            //Log.i("mAction", "${mAction}");
+            //val stringResponse = response.body()?.string()
+
+            //val res1 = response.body()?.string()?.split("\"")
+            //Log.i("res1 size", "onResponse: ${res1?.size}")
+
+            //var str_response = response.body()?.string()
+            if (str_response != null) {
+                Log.i("str_response", str_response)
+                //var dataResponse: JSONArray = JSONArray(str_response).getJSONArray(0)
+                //var json_objectdetail: JSONObject = jsonarray_info.getJSONObject(i)
+                //val json_contact: JSONObject = JSONObject(str_response)
+                var json_objectdetail:JSONObject= JSONObject(str_response)
+                var codeWL = json_objectdetail.getString("code")
+                //var jsonarray_info: JSONArray = json_contact.getJSONArray("data")
+                //var i:Int = 0
+                //var size:Int = jsonarray_info.length()
+                Log.i("json-code", codeWL);
+                if ( codeWL.compareTo("0") === 0 ) {
+                    var dataWL = json_objectdetail.getString("data")
+                    Log.i("json-data", dataWL)
+                    ble.state = true
+                    //var dataTmp = "a5163044e4969873095e";
+                    var dataTmp = "5511615031555555713541414141350000B225CDEC0000000000000000";
+                    //dataTmp = "554261503155555571354141414135";
+                    //ble.startBle(code = dataWL, action = mAction)
+                    ble.startBle(code = dataTmp, action = mAction)
+                }
+
             }
+            /*if (stringResponse != null) {
+                Log.i("json11", stringResponse)
+            }*/
+
+            //if (res != null) {
+                //ble.startBle(code = res)
+            //}
         }
     }
 

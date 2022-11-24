@@ -68,6 +68,7 @@ public final class DeviceSocketIO extends Service {
 
         socket.on(Constants.ACTION_ADMIN, args -> {
             JSONArray dataResponse;
+            Log.d(TAG, "Action on WEB");
             try {
                 dataResponse = new JSONArray(args);
                 JSONObject dataJson = new JSONObject(dataResponse.get(1).toString());
