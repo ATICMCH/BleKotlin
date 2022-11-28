@@ -16,11 +16,8 @@ class Ble(private val mContext: Context) {
     private lateinit var mCode: String
     private lateinit var mAction: String
     private lateinit var mNewCode: String
-    private var tAction: String = "NA";
-    public var state: Boolean = false;
 
-    public var dimData = 0;
-    public lateinit var mDataQueue: Queue<ByteArray>
+    private lateinit var mDataQueue: Queue<ByteArray>
 
     private val TAG = "Main Activity"
 
@@ -43,11 +40,6 @@ class Ble(private val mContext: Context) {
 
         //Tomamos el codigo y lo guardamos en una variable global
         mCode = code
-        state = false;
-
-        if (action != null) {
-            tAction = action
-        };
 
         if (newCode != null) {
             mNewCode = newCode
@@ -79,7 +71,6 @@ class Ble(private val mContext: Context) {
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
                 }
-                //gatt.requestMtu(517);
                 gatt.discoverServices()
                 myGatt = gatt
                 Log.i(TAG, "onConnectionStateChange: Discover Services")
@@ -107,7 +98,6 @@ class Ble(private val mContext: Context) {
             gatt.setCharacteristicNotification(characteristicNotify, true)
             val desc = characteristicNotify!!.getDescriptor(CCCD_UUID)
             desc.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-            //gatt.requestMtu(512)
             gatt.writeDescriptor(desc)
         }
         /*-----------------------3º-----------------------*/
@@ -118,7 +108,6 @@ class Ble(private val mContext: Context) {
         ) {
             if (descriptor.characteristic === characteristicNotify) {
                 sendBLE(gatt)
-                //sendBLE2(gatt)
             } else Log.i(TAG, "onDescriptorWrite: Descriptor is not connected")
         }
 
@@ -132,10 +121,6 @@ class Ble(private val mContext: Context) {
         /*-----------------------4ª-----------------------*/
 
         // Aqui escribimos las caracteristicas
-
-        fun updateState(valueData: Boolean) {
-            state = valueData;
-        }
 
         fun sendBLE_Tmp(gatt: BluetoothGatt) {
             characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
@@ -166,7 +151,6 @@ class Ble(private val mContext: Context) {
         fun sendBLE(gatt: BluetoothGatt) {
             val dataIn = HexUtil.hexStringToBytes(mCode)
             mDataQueue = HexUtil.splitByte(dataIn, Constants.MAX_SEND_DATA)
-            dimData = mDataQueue.size;
             Log.i(TAG, "SIZE: ${mDataQueue.size}")
             writeDataDevice(gatt)
         }

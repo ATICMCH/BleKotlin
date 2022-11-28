@@ -29,7 +29,11 @@ class WeLock(
 
 
     fun getHex() {
-        val startDate: Int = ((System.currentTimeMillis() / 1000) - 28800).toInt()
+        // 28800
+        // - 180  ok
+        // + 180 ok
+        // + 4500 ok
+        val startDate: Int = ((System.currentTimeMillis() / 1000) + 4500).toInt()
 
         val endDate: Int = startDate + 86400
 
@@ -50,8 +54,8 @@ class WeLock(
             deviceBleName: "WeLockE31J8",
             deviceRandomFactor: "$mRndNumber", 
             password: $mCode, 
-            index: 20, 
-            user: 15, 
+            index: 21, 
+            user: 16, 
             times: 65000, 
             startTimestamp: $startDate, 
             endTimestamp: $endDate}
@@ -66,7 +70,7 @@ class WeLock(
             deviceRandomFactor: "$mRndNumber",
             cardID: "M821110010778", 
             cardQr: "https://download.we-lock.com/app/dl/2/a666a500a8267e82", 
-            type: 2}
+            type: 1}
         """.trimIndent()
 
 
@@ -142,44 +146,17 @@ class WeLock(
 
         override fun onResponse(p0: Call, response: Response) {
             var str_response = response.body()?.string()?.trim();
-            //val res = response.body()?.string()?.split("\"")?.get(3)
-            //Log.i("Action", "onResponse: $res")
-            //Log.i("mAction", "${mAction}");
-            //val stringResponse = response.body()?.string()
-
-            //val res1 = response.body()?.string()?.split("\"")
-            //Log.i("res1 size", "onResponse: ${res1?.size}")
-
-            //var str_response = response.body()?.string()
             if (str_response != null) {
                 Log.i("str_response", str_response)
-                //var dataResponse: JSONArray = JSONArray(str_response).getJSONArray(0)
-                //var json_objectdetail: JSONObject = jsonarray_info.getJSONObject(i)
-                //val json_contact: JSONObject = JSONObject(str_response)
                 var json_objectdetail:JSONObject= JSONObject(str_response)
                 var codeWL = json_objectdetail.getString("code")
-                //var jsonarray_info: JSONArray = json_contact.getJSONArray("data")
-                //var i:Int = 0
-                //var size:Int = jsonarray_info.length()
                 Log.i("json-code", codeWL);
                 if ( codeWL.compareTo("0") === 0 ) {
                     var dataWL = json_objectdetail.getString("data")
                     Log.i("json-data", dataWL)
-                    ble.state = true
-                    //dataTmp = "554261503155555571354141414135";
                     ble.startBle(code = dataWL, action = mAction)
-                    //ble.startBle(code = dataTmp, action = mAction)
-                    //ble.startBle(code = "5530", action = "ERROR")
                 }
-
             }
-            /*if (stringResponse != null) {
-                Log.i("json11", stringResponse)
-            }*/
-
-            //if (res != null) {
-                //ble.startBle(code = res)
-            //}
         }
     }
 
