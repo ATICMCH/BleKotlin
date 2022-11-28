@@ -16,4 +16,6 @@ public final class Constants {
     public final static String ACTION_OPEN_LOCK = "openLock";
     public final static String ACTION_NEW_CODE = "newCode";
     public final static String ACTION_SET_CARD = "setCard";
+
+    public final static int MAX_SEND_DATA = 20;
 }

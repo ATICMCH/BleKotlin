@@ -19,6 +19,9 @@ class Ble(private val mContext: Context) {
     private var tAction: String = "NA";
     public var state: Boolean = false;
 
+    public var dimData = 0;
+    public lateinit var mDataQueue: Queue<ByteArray>
+
     private val TAG = "Main Activity"
 
     private val SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e")
@@ -114,10 +117,8 @@ class Ble(private val mContext: Context) {
             status: Int
         ) {
             if (descriptor.characteristic === characteristicNotify) {
-                //if (mAction == "newCode") sendBLE1(gatt)
-                //else sendBLE(gatt)
-                //sendBLE1(gatt)
-                sendBLE2(gatt)
+                sendBLE(gatt)
+                //sendBLE2(gatt)
             } else Log.i(TAG, "onDescriptorWrite: Descriptor is not connected")
         }
 
@@ -136,7 +137,7 @@ class Ble(private val mContext: Context) {
             state = valueData;
         }
 
-        fun sendBLE(gatt: BluetoothGatt) {
+        fun sendBLE_Tmp(gatt: BluetoothGatt) {
             characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
             Log.i(TAG, "Prueba00111111")
             val codeHex = mCode.decodeHex()
@@ -162,157 +163,37 @@ class Ble(private val mContext: Context) {
             }
         }
 
-        fun sendBLE2(gatt: BluetoothGatt) {
+        fun sendBLE(gatt: BluetoothGatt) {
             val dataIn = HexUtil.hexStringToBytes(mCode)
-            val mDataQueue: Queue<ByteArray> = HexUtil.splitByte(dataIn, 20)
+            mDataQueue = HexUtil.splitByte(dataIn, Constants.MAX_SEND_DATA)
+            dimData = mDataQueue.size;
             Log.i(TAG, "SIZE: ${mDataQueue.size}")
-            if (mDataQueue.size == 1 ) {
+            writeDataDevice(gatt)
+        }
+
+        @ExperimentalUnsignedTypes
+        fun ByteArray.toHexString() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }
+
+
+        private fun writeDataDevice(gatt: BluetoothGatt){
+            var counter = 1;
+            while(mDataQueue.peek() != null){
+                if (counter > 1) break;
+                val data = mDataQueue.poll()
                 if (ActivityCompat.checkSelfPermission(
                         mContext,
                         Manifest.permission.BLUETOOTH_CONNECT
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {}
                 characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
-                characteristicWrite!!.value = dataIn
+                characteristicWrite!!.value = data
                 //Log.i(TAG, "Sending: ${characteristicWrite!!.value.toHexString()}")
                 Log.i(TAG, "Sending: ${HexUtil.formatHexString(characteristicWrite!!.value, true)}")
-                // characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 gatt.writeCharacteristic(characteristicWrite)
-            }
-            else {
-                while(mDataQueue.peek() != null){
-                    val data = mDataQueue.poll()
-                    if (ActivityCompat.checkSelfPermission(
-                            mContext,
-                            Manifest.permission.BLUETOOTH_CONNECT
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {}
-                    characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
-                    characteristicWrite!!.value = data
-                    //Log.i(TAG, "Sending: ${characteristicWrite!!.value.toHexString()}")
-                    Log.i(TAG, "Sending: ${HexUtil.formatHexString(characteristicWrite!!.value, true)}")
-                    characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                    gatt.writeCharacteristic(characteristicWrite)
-                }
+                counter++;
             }
         }
-
-        fun sendBLE1(gatt: BluetoothGatt) {
-            characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
-
-            // get properties del device
-            val rxProperties = characteristicWrite!!.properties
-            Log.i(TAG, "rxProperties -- ${rxProperties}")
-            Log.i(TAG, "PROPERTY_WRITE -- ${BluetoothGattCharacteristic.PROPERTY_WRITE}")
-            Log.i(TAG, "state writeRequest -- ${(rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE > 0)}")
-            Log.i(TAG, "Prueba00001 -- ${tAction} -- ${mAction} -- ${state} -- ${mAction.compareTo("newCode")}")
-            //val codeHex:ByteArray
-            /*if(!state && mAction.compareTo("newCode")!=0){ // Ingresa siempre en la primera llamada para el token
-                codeHex = mCode.decodeHex()
-            }else{
-                codeHex = mCode.decodeHex()
-            }*/
-            val codeHex = mCode.decodeHex()
-            //val codeHex = mCode.toByteArray(Charsets.UTF_8)
-            Log.i(TAG, "dataHex -- ${codeHex.contentToString()}")
-            Log.i(TAG, "valueDataHex -- ${codeHex.toString()}")
-            Log.i(TAG, "valueDataHex -- ${codeHex.toString(Charsets.UTF_8)}")
-            val maxByteArraySize = codeHex.size
-            val plusOne = if ((maxByteArraySize % 20) > 0) 1 else 0
-            if (ActivityCompat.checkSelfPermission(
-                    mContext,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-            }
-
-            if ( false ) { // !state
-                Log.i(TAG, "mCode normal -- ${mCode}")
-                Log.i(TAG, "codeHex -- ${codeHex} -> dim: ${codeHex.size}")
-                Log.i(TAG, "codeHex.toHexString -- ${codeHex.toHexString()} -> dim: ${codeHex.toHexString().length}")
-
-                for (j in 1..maxByteArraySize / 20 + plusOne) {
-                    Log.i(TAG, "IN: ---- IN")
-                    if (maxByteArraySize - (j * 20) >= 20) {
-                        characteristicWrite!!.value = codeHex.copyOfRange(20 * (j - 1), 20 * j)
-                        Log.i(TAG, "Sending: ${characteristicWrite!!.value.toHexString()}")
-                    } else {
-                        characteristicWrite!!.value =
-                            codeHex.copyOfRange(20 * (j - 1), maxByteArraySize)
-                        Log.i(TAG, "Sending: ${characteristicWrite!!.value.toHexString()}")
-                    }
-                    characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-
-                    gatt.writeCharacteristic(characteristicWrite)
-                }
-
-
-                //characteristicWrite!!.value = codeHex.copyOfRange(20 * (j - 1), maxByteArraySize)
-                //characteristicWrite!!.value = codeHex
-                //Log.i(TAG, "Sending1: ${characteristicWrite!!.value.toHexString()}")
-                //characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                //gatt.writeCharacteristic(characteristicWrite)
-                //state = true;
-            } else {
-                val splitData = 8
-                var i: Int
-                var fin = splitData
-                var initD = 0
-                //val t = if (codeHex.size % 20 === 0) 0 else 1;
-                //val tt = codeHex.size;
-
-                val t = if (codeHex.toHexString().length % splitData === 0) 0 else 1;
-                val tt = codeHex.toHexString().length;
-                val veces = ((codeHex.toHexString().length / splitData) + t) as Int // codeHex.size
-                Log.i("d11", codeHex.toHexString())
-                Log.i("d22", mCode)
-                Log.i(TAG, "veces ${veces} -- ${tt}")
-                Log.i(TAG, "veces1 ${codeHex.toString()}")
-                Log.i(TAG, "veces2 ${codeHex.toHexString()}")
-                //{
-                Log.i(TAG, "Prueba002222")
-                i = 0
-                //characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                //characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
-                while (i < veces) { // < veces // Prueba <=0
-                    characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
-                    val dataCode: String
-                    if (codeHex.size < splitData) {
-                        dataCode = codeHex.toHexString()
-                    }else{
-                        dataCode = codeHex.toHexString().substring(initD, fin)
-                    }
-                    //val dataCode: String = codeHex.toHexString();
-                    Log.i(TAG, "Prueba001: ${dataCode}")
-                    //Log.i(TAG, "Prueba001: ${initD} - ${fin}")
-                    characteristicWrite!!.value = dataCode.decodeHex()
-                    //characteristicWrite!!.value = codeHex
-                    //characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                    //gatt.writeCharacteristic(characteristicWrite)
-
-
-                    characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                    //if ( i === (veces - 1)) characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                    //else characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
-
-
-                    Log.i(TAG, "Sending2: ${characteristicWrite!!.value.toHexString()}")
-                    gatt.writeCharacteristic(characteristicWrite)
-
-                    initD = fin
-                    if (i == codeHex.toHexString().length / splitData - 1 && codeHex.toHexString().length % splitData !== 0) fin = fin + codeHex.toHexString().length % splitData
-                    else fin = fin + splitData
-                    i++
-                    Thread.sleep(5000)
-                }
-                // gatt.writeCharacteristic(characteristicWrite)
-            //}
-            }
-        }
-
-        @ExperimentalUnsignedTypes
-        fun ByteArray.toHexString() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }
-
         /*-----------------------5º-----------------------*/
 
         override fun onCharacteristicWrite(
@@ -326,6 +207,10 @@ class Ble(private val mContext: Context) {
                     characteristic.value
                     Log.i("Char Write1", "Char: ${characteristic.value.toHexString()}")
                 }
+
+                // SEND SOME PACKAGES
+                writeDataDevice(gatt)
+                // SEND SOME PACKAGES
 
                 // Captura de escritura
                 with(characteristic) {
@@ -396,6 +281,8 @@ class Ble(private val mContext: Context) {
                     Constants.ACTION_SET_CARD ->
                         WeLock("$rndNumber", "$devicePower", mAction, this@Ble)
                             .getToken()
+                    "ERROR" ->
+                        Log.i(TAG, "Fin ERROR-ERROR-ERROR");
                 }
             } else if (characteristic.value[0].toInt() == 85 &&
                 characteristic.value[1].toInt() == 49

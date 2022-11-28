@@ -52,7 +52,7 @@ class WeLock(
             password: $mCode, 
             index: 20, 
             user: 15, 
-            times: 5, 
+            times: 65000, 
             startTimestamp: $startDate, 
             endTimestamp: $endDate}
         """.trimIndent()
@@ -66,7 +66,7 @@ class WeLock(
             deviceRandomFactor: "$mRndNumber",
             cardID: "M821110010778", 
             cardQr: "https://download.we-lock.com/app/dl/2/a666a500a8267e82", 
-            type: 1}
+            type: 2}
         """.trimIndent()
 
 
@@ -169,6 +169,7 @@ class WeLock(
                     //dataTmp = "554261503155555571354141414135";
                     ble.startBle(code = dataWL, action = mAction)
                     //ble.startBle(code = dataTmp, action = mAction)
+                    //ble.startBle(code = "5530", action = "ERROR")
                 }
 
             }
