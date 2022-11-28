@@ -166,11 +166,9 @@ class WeLock(
                     var dataWL = json_objectdetail.getString("data")
                     Log.i("json-data", dataWL)
                     ble.state = true
-                    //var dataTmp = "a5163044e4969873095e";
-                    var dataTmp = "5511615031555555713541414141350000B225CDEC0000000000000000";
                     //dataTmp = "554261503155555571354141414135";
-                    //ble.startBle(code = dataWL, action = mAction)
-                    ble.startBle(code = dataTmp, action = mAction)
+                    ble.startBle(code = dataWL, action = mAction)
+                    //ble.startBle(code = dataTmp, action = mAction)
                 }
 
             }

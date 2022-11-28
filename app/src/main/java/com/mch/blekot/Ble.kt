@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.mch.blekot.util.Constants
+import com.mch.blekot.util.HexUtil
 import java.util.*
 
 
@@ -50,6 +51,7 @@ class Ble(private val mContext: Context) {
         }
         mAction = action!!
 
+        // D6F53BE46DF5 -> 21471175
         val btAdapter = BluetoothAdapter.getDefaultAdapter()
         val device = btAdapter.getRemoteDevice("D6:F5:3B:E4:6D:F5") // C7:12:48:82:08:2F
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_CONNECT) !=
@@ -114,7 +116,8 @@ class Ble(private val mContext: Context) {
             if (descriptor.characteristic === characteristicNotify) {
                 //if (mAction == "newCode") sendBLE1(gatt)
                 //else sendBLE(gatt)
-                sendBLE1(gatt)
+                //sendBLE1(gatt)
+                sendBLE2(gatt)
             } else Log.i(TAG, "onDescriptorWrite: Descriptor is not connected")
         }
 
@@ -156,6 +159,41 @@ class Ble(private val mContext: Context) {
                 characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
 
                 gatt.writeCharacteristic(characteristicWrite)
+            }
+        }
+
+        fun sendBLE2(gatt: BluetoothGatt) {
+            val dataIn = HexUtil.hexStringToBytes(mCode)
+            val mDataQueue: Queue<ByteArray> = HexUtil.splitByte(dataIn, 20)
+            Log.i(TAG, "SIZE: ${mDataQueue.size}")
+            if (mDataQueue.size == 1 ) {
+                if (ActivityCompat.checkSelfPermission(
+                        mContext,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {}
+                characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
+                characteristicWrite!!.value = dataIn
+                //Log.i(TAG, "Sending: ${characteristicWrite!!.value.toHexString()}")
+                Log.i(TAG, "Sending: ${HexUtil.formatHexString(characteristicWrite!!.value, true)}")
+                // characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                gatt.writeCharacteristic(characteristicWrite)
+            }
+            else {
+                while(mDataQueue.peek() != null){
+                    val data = mDataQueue.poll()
+                    if (ActivityCompat.checkSelfPermission(
+                            mContext,
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {}
+                    characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
+                    characteristicWrite!!.value = data
+                    //Log.i(TAG, "Sending: ${characteristicWrite!!.value.toHexString()}")
+                    Log.i(TAG, "Sending: ${HexUtil.formatHexString(characteristicWrite!!.value, true)}")
+                    characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    gatt.writeCharacteristic(characteristicWrite)
+                }
             }
         }
 
