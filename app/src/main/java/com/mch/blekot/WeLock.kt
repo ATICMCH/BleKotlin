@@ -29,11 +29,11 @@ class WeLock(
 
 
     fun getHex() {
-        // 28800
-        // - 180  ok
-        // + 180 ok
-        // + 4500 ok
-        val startDate: Int = ((System.currentTimeMillis() / 1000) + 4500).toInt()
+        // - 28800 OK FUNCIONA
+        // - 180  KO
+        // + 180 KO
+        // + 4500 KO
+        val startDate: Int = ((System.currentTimeMillis() / 1000) - 28800).toInt()
 
         val endDate: Int = startDate + 86400
 
@@ -54,8 +54,8 @@ class WeLock(
             deviceBleName: "WeLockE31J8",
             deviceRandomFactor: "$mRndNumber", 
             password: $mCode, 
-            index: 21, 
-            user: 16, 
+            index: 24, 
+            user: 19, 
             times: 65000, 
             startTimestamp: $startDate, 
             endTimestamp: $endDate}
@@ -63,7 +63,7 @@ class WeLock(
 
         //times: 65000,
 
-        val newCodeJson1 = """{
+        val newCodeJsonCard = """{
             appID: "WELOCK2202161033", 
             deviceNumber: "21471175", 
             deviceBleName: "WeLockE31J8",
@@ -74,6 +74,14 @@ class WeLock(
         """.trimIndent()
 
 
+        val newCodeJsonDeletePass = """{
+            appID: "WELOCK2202161033", 
+            deviceNumber: "21471175", 
+            deviceBleName: "WeLockE31J8",
+            deviceRandomFactor: "$mRndNumber",
+            index: 24, 
+            user: 19}
+        """.trimIndent()
 
 
 
@@ -84,13 +92,13 @@ class WeLock(
                 actionCallback
             )
             "newCode" -> {
-                Log.i("Json", newCodeJson1)
+                /*Log.i("Json", newCodeJsonCard)
 
                 postWithToken(
                     PATH_CARD,
-                    newCodeJson1,
+                    newCodeJsonCard,
                     actionCallback
-                )
+                )*/
                 /*Log.i("Json", newCodeJson)
 
                 postWithToken(
@@ -98,6 +106,12 @@ class WeLock(
                     newCodeJson,
                     actionCallback
                 )*/
+                Log.i("Json", newCodeJsonDeletePass)
+                postWithToken(
+                    PATH_CODE_DELETE,
+                    newCodeJsonDeletePass,
+                    actionCallback
+                )
             }
 
         }
