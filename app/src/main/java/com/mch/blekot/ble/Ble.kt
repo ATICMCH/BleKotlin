@@ -3,10 +3,12 @@ package com.mch.blekot.ble
 import android.annotation.SuppressLint
 import android.bluetooth.*
 import android.util.Log
+import com.mch.blekot.R
 import com.mch.blekot.io.socket.welock.WeLock
 import com.mch.blekot.services.SocketSingleton
 import com.mch.blekot.util.Constants
 import com.mch.blekot.util.HexUtil
+import com.mch.blekot.util.PreferencesManager
 import com.mch.blekot.util.UtilDevice
 import java.util.*
 
@@ -62,7 +64,8 @@ object Ble {
             val btAdapter = BluetoothAdapter.getDefaultAdapter()
             btAdapter?.let { adapter ->
                 try {
-                    val device = adapter.getRemoteDevice(Constants.MAC_ADDRESS)
+                    val device = adapter.getRemoteDevice(PreferencesManager.getString(get))
+                    mBluetoothGatt = device.connectGatt(null, true, mGattCallback)
                     mBluetoothGatt = device.connectGatt(null, true, mGattCallback)
                 }catch (exception: IllegalArgumentException){
                     Log.w(TAG, "Dispositivo no encontrado")

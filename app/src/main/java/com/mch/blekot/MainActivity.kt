@@ -4,10 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.icu.text.IDNA.Info
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.mch.blekot.databinding.ActivityMainBinding
 import com.mch.blekot.io.socket.welock.WeLock
@@ -23,23 +28,45 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
 
+    private val isFirstTime = true
+
     override
     fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mBinding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(mBinding.root)
 
         mBinding.btnOpenLock.setOnClickListener { WeLock.openLock() }
 
-        launchSocketService()
+        //launchSocketService()
+
+
+
+        if (savedInstanceState == null) {
+            val isFirstTime = getPreferences(Context.MODE_PRIVATE)
+                .getBoolean(getString(R.string.first_time), false)
+            if (!isFirstTime)
+            launchPreferenceFragment()
+        }
+
 
         //launchMicroService()
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun launchMicroService(){
+
+    private fun launchPreferenceFragment() {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add<InfoFragment>(R.id.infoFragment)
+        }
+        //Escondemos la vista
+        mBinding.textView.visibility = View.GONE
+    }
+
+    private fun launchMicroService() {
         val intent = Intent(applicationContext, MicroService::class.java)
         startService(intent)
     }
