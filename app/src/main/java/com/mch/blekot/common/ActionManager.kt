@@ -39,15 +39,15 @@ object ActionManager : ActionManagerAux {
         Ble.connectDevice()
     }
 
-    override suspend fun setNewCode(newPassword: String, days: Int) {
+    override suspend fun setNewCode(newPassword: String, days: Int, index: Int, times: Int) {
 
         Log.i("Thread: ", Thread.currentThread().name)
 
         mAction = Constants.NEW_CODE
         mNewPassword = newPassword
         mDays = days
-       // mIndex = index
-       // mTimes  = times
+        mIndex = index
+        mTimes  = times
 
         Ble.connectDevice()
     }

@@ -54,9 +54,9 @@ object JsonManager {
                     deviceBleName: "$deviceName", 
                     deviceRandomFactor: "$rdmNumber", 
                     password: ${ActionManager.getDeviceNewPassword()}, 
-                    index: ${Constants.CODE_INDEX}, 
+                    index: ${ActionManager.getIndex()}, 
                     user: ${Constants.CODE_USER} , 
-                    times: ${Constants.CODE_TIMES},
+                    times: ${ActionManager.getTimes()},
                     startTimestamp: $startDate, 
                     endTimestamp: $endDate}
                 """.trimIndent()
