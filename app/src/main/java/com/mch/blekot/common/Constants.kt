@@ -17,15 +17,15 @@ object Constants {
 
     /*********************Oficina**********************/
 
-    const val ID = "PRUEBA100"
+    const val ID = "GA11"
 
     var MAC_ADDRESS: String? = null
     var DEVICE_NAME: String? = null
     var DEVICE_ID_NUMBER: String? = null
 
     //Server de pruebas
-    //const val URL_TCP: String = "https://tcpmch2022.fly.dev"
-    const val URL_TCP = "http://192.168.0.76:3002/"
+    const val URL_TCP: String = "https://tcpmch.fly.dev"
+    //const val URL_TCP = "http://192.168.0.76:3002/"
 
     var IP_ARDUINO = "http://192.168.1.150/"
 

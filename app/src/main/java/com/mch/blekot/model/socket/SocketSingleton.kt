@@ -105,12 +105,12 @@ class SocketSingleton private constructor() {
                             .toString().toInt()
                         days = if (days == 0) Constants.MIN_DAYS_PASSWORD else days
 
-                        val index =
-                            Objects.requireNonNull(pDataJson.getValue("index")).toString().toInt()
-                        val times =
-                            Objects.requireNonNull(pDataJson.getValue("times")).toString().toInt()
+//                        val index =
+//                            Objects.requireNonNull(pDataJson.getValue("index")).toString().toInt()
+//                        val times =
+//                            Objects.requireNonNull(pDataJson.getValue("times")).toString().toInt()
 
-                        executeAction { ActionManager.setNewCode(code, days, index, times) }
+                        executeAction { ActionManager.setNewCode(code, days) }
                     }
 
                     Constants.ACTION_SET_CARD -> {
