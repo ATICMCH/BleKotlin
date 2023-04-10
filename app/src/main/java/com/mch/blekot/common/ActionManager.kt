@@ -2,7 +2,6 @@ package com.mch.blekot.common
 
 import android.util.Log
 import com.mch.blekot.model.welock.WeLock
-import com.mch.blekot.model.welock.BatteriesManager
 import com.mch.blekot.model.socket.SocketSingleton
 import com.mch.blekot.common.utils.ActionManagerAux
 import com.mch.blekot.common.utils.JsonManager
@@ -90,10 +89,6 @@ object ActionManager : ActionManagerAux {
      * Extras *
      * */
 
-    override suspend fun getDevicesBatteries() {
-        BatteriesManager.getDevicesBatteries()
-    }
-
     override suspend fun openPortal() {
         try {
             val request = Request.Builder()
@@ -103,7 +98,6 @@ object ActionManager : ActionManagerAux {
             val response = httpClient.newCall(request).execute()
 
             if (response.isSuccessful) {
-                Log.i("Open Portal", "Response: " + response.body()!!.string())
                 sendResponseToServer(
                     status = Constants.STATUS_ARDUINO_OK
                 )
@@ -115,7 +109,6 @@ object ActionManager : ActionManagerAux {
                 status = Constants.STATUS_ARDUINO_ERROR
             )
         }
-        SocketSingleton.socketInstance?.isProcessActive = false
     }
 
     fun setAction(action: Int) {
@@ -179,5 +172,6 @@ object ActionManager : ActionManagerAux {
             Constants.ID,
             responseJson
         )
+        SocketSingleton.socketInstance?.isProcessActive = false
     }
 }

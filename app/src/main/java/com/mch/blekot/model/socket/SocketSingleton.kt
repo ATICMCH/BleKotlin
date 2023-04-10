@@ -160,22 +160,6 @@ class SocketSingleton private constructor() {
                         executeAction { ActionManager.syncTime(newTime) }
                     }
 
-                    Constants.ACTION_GET_BATTERY -> {
-
-                        val macAddress =
-                            Objects.requireNonNull(pDataJson.getValue("macAddress")).toString()
-
-                        val deviceName =
-                            Objects.requireNonNull(pDataJson.getValue("deviceName")).toString()
-
-                        val deviceId =
-                            Objects.requireNonNull(pDataJson.getValue("deviceId")).toString()
-
-                        ValidateUtil.setUpBle(macAddress, deviceName, deviceId)
-
-                        executeAction { ActionManager.getDevicesBatteries() }
-                    }
-
                 }
             } catch (e: ValidateException) {
                 isProcessActive = false
@@ -214,6 +198,7 @@ class SocketSingleton private constructor() {
             }catch (_: Exception){}
         }
     }
+
 
     companion object {
         private val TAG = SocketService::class.java.simpleName

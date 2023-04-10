@@ -15,7 +15,6 @@ import com.mch.blekot.common.ActionManager
 import com.mch.blekot.common.utils.HexUtil
 import com.mch.blekot.common.utils.HexUtil.toHexString
 import com.mch.blekot.model.socket.SocketSingleton
-import com.mch.blekot.model.welock.BatteriesManager
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -128,9 +127,7 @@ object Ble {
         /*-----------------------1º-----------------------*/
 
         @SuppressLint("MissingPermission")
-        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-            Log.i("ConnectionStateChange", Thread.currentThread().name)
-
+        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int){
             super.onConnectionStateChange(gatt, status, newState)
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 gatt.discoverServices()
@@ -205,6 +202,9 @@ object Ble {
             executeAction {
                 var statusResponse = -1
 
+
+                Log.i("Characteristics", "1: ${characteristic}}")
+
                 if (characteristic[0] == 85) {
                     when (characteristic[1]) {
                         /** All responses start with 48 except SetCard **/
@@ -212,16 +212,6 @@ object Ble {
                             val rndNumber = characteristic[2]
                             val devicePower = characteristic[3]
 
-                            Log.i(
-                                    TAG,
-                                    "onCharacteristicChanged: rndNumber: $rndNumber, battery: $devicePower"
-                            )
-
-                            if (isOnlyAsk) {
-                                BatteriesManager.sendResponse(devicePower)
-                                isOnlyAsk = false
-                                return@executeAction
-                            }
                             ActionManager.getToken(devicePower.toString(), rndNumber.toString())
                             return@executeAction
                         }
@@ -234,11 +224,8 @@ object Ble {
                 } else if (characteristic[0] == 165) {
                     statusResponse = characteristic[3]
                 }
-
-                SocketSingleton.socketInstance!!.isProcessActive = false
-                Log.i("Status Response", "$statusResponse")
                 ActionManager.sendResponseToServer(
-                        Constants.CODE_MSG_OK,
+                        status = Constants.CODE_MSG_OK,
                         statusMOne = statusResponse
                 )
                 gattTmp.close()
@@ -263,10 +250,7 @@ object Ble {
             writeChar(gattTmp)
         } catch (e: Exception) {
             Log.e(TAG, e.message.toString())
-
-            SocketSingleton.socketInstance!!.isProcessActive = false
             ActionManager.sendResponseToServer(status = Constants.CODE_MSG_KO)
-
             gattTmp.close()
         }
     }
@@ -294,9 +278,6 @@ object Ble {
         }
     }
 
-    private fun isBluetoothActive(): Boolean {
-        return bluetoothAdapter!!.isEnabled
-    }
 
     //Coroutines
     private fun executeAction(block: suspend () -> Unit): Job {

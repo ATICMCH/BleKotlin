@@ -12,7 +12,7 @@ import java.util.*
 
 object WeLock {
 
-    /*WeLock's API paths*/
+    /* WeLock's API paths */
     private const val urlWeLock = "https://api.we-lock.com"
     private const val PATH_TOKEN = "/API/Auth/Token"
 
@@ -50,7 +50,7 @@ object WeLock {
     private var tokenCallback: Callback = object : Callback {
 
         override fun onFailure(p0: Call, p1: IOException) {
-            TODO("Not yet implemented")
+            ActionManager.sendResponseToServer(status = Constants.CODE_MSG_KO)
         }
 
         override fun onResponse(p0: Call, response: Response) {
@@ -62,6 +62,8 @@ object WeLock {
             val data = ActionManager.getPostData(mDevicePower, mRndNumber)
             val json = data["json"]
             val path = data["path"]
+
+            Log.i("data", "${data["json"]} , ${data["path"]} ")
 
             postWithToken(
                 path!!,
@@ -75,7 +77,7 @@ object WeLock {
     private var actionCallback: Callback = object : Callback {
 
         override fun onFailure(p0: Call, p1: IOException) {
-            Log.i("Action Callback", "FAIL")
+            ActionManager.sendResponseToServer(status = Constants.CODE_MSG_KO)
         }
 
         override fun onResponse(p0: Call, response: Response) {
@@ -90,7 +92,6 @@ object WeLock {
             } else {
                 Log.i("WeLock", dataJson.toString())
                 Ble.disconnectGatt()
-                SocketSingleton.socketInstance!!.isProcessActive = false
                 ActionManager.sendResponseToServer(status = Constants.CODE_MSG_PARAMS)
                 Log.i("WeLock", "$dataJson error")
             }
