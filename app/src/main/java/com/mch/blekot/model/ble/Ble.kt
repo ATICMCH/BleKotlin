@@ -51,7 +51,7 @@ object Ble {
         mCode = "5530"
 
         if(!isBluetoothEnabled()){
-            ActionManager.sendResponseToServer(Constants.STATUS_BLE_DISCONNECT)
+            ActionManager.sendResponseToServer(Constants.CODE_MSG_BLE_OFF)
 
             return@withContext
         }

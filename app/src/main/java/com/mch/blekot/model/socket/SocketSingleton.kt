@@ -54,7 +54,7 @@ class SocketSingleton private constructor() {
                 val pDataJson = ProcessDataJson()
                 pDataJson.getData(dataJson)
 
-                val action = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_CMD))
+                val action = Objects.requireNonNull(pDataJson.getValue("cmd"))
                     .toString()
                 clientFromServer = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_CLIENT_FROM))
                     .toString()

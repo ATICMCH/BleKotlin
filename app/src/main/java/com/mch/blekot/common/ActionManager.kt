@@ -152,16 +152,12 @@ object ActionManager : ActionManagerAux {
         status: Int,
         statusMOne: Int = Constants.STATUS_LOCK,
         statusMTwo: Int = Constants.STATUS_LOCK,
-        phoneBattery: Int? = null,
-        isCharging: Boolean? = null
     ) {
         val responseJson = JsonManager.getServerResponseJson(
             status = status,
             statusMOne = statusMOne,
             statusMTwo = statusMTwo,
-            phoneBattery = phoneBattery,
             deviceBattery = mDevicePower?.toInt(),
-            isCharging = isCharging,
             action = mAction
         )
 

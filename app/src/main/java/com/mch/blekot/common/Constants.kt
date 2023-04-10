@@ -64,7 +64,7 @@ object Constants {
     const val PARAMETER_CMD = "cmd"
     const val PARAMETER_CLIENT_FROM = "clientFrom"
     const val PARAMETER_MAC_ADDRESS = "macAddress"
-    const val PARAMETER_DEVICE_ID = "deviceID"
+    const val PARAMETER_DEVICE_ID = "deviceId"
     const val PARAMETER_DEVICE_NAME ="deviceName"
     const val PARAMETER_CODE = "code"
     const val PARAMETER_DAYS = "days"
@@ -80,23 +80,26 @@ object Constants {
     const val MAX_SEND_DATA = 20
     const val MIN_DAYS_PASSWORD = 1
 
-    /*****************UserResponse*****************/
-
-    const val MSG_OK = "¡Se ha procesado exitosamente la peticion!"
-    const val MSG_PENDANT = "¡Hay una peticion pendiente!"
-    const val MSG_KO = "¡Error con el dispositivo Bluetooth!"
-    const val MSG_NULL_POINT = "¡Faltan enviar parametros!"
-    const val MSG_PARAMS = "¡Error en WeLock-API, valor de parametros erroneo o manija no activada!"
-
-
     /****************SocketResponse****************/
 
     const val CODE_MSG_OK = 1
-    const val CODE_MSG_PENDANT = 0
-    const val CODE_MSG_PARAMS = 2
     const val CODE_MSG_KO = -1
-    const val CODE_MSG_NULL_POINT = -1
-    const val STATUS_BLE_DISCONNECT = 4
+    const val CODE_MSG_PARAMS = 2
+    const val CODE_MSG_PENDANT = 0
+    const val CODE_MSG_NULL_POINT = -2
+    const val CODE_MSG_BLE_OFF = -3
+
+    const val MSG_PENDANT = "Hay una peticion pendiente"
+    const val MSG_KO = "Error con el movil"
+    const val MSG_OK = "Se ha procesado exitosamente la peticion"
+    const val MSG_NULL_POINT = "Faltan enviar parametros al móvil"
+    const val MSG_BLE_OFF = "El bluetooth del móvil no se encuentra activado"
+    const val MSG_PARAMS = "Error en WeLock-API, puede que la manija no activada"
+
+    const val ERROR_ARDUINO = "IP del arduino mal escrita"
+    const val ERROR_MAC_ADDRESS = "Mac Address mal escrito"
+    const val ERROR_LENGTH = "Error en la cantidad de caracteres"
+    const val ERROR_ONLY_NUMBERS = "El ID debe contener solo numeros"
 
     const val STATUS_LOCK = -1
     const val STATUS_ARDUINO_OK = 1
@@ -105,10 +108,7 @@ object Constants {
     const val SYNC_TIME_OK = 1
     const val SYNC_TIME_ERROR = -1
 
-    const val ERROR_LENGTH = "Error en la cantidad de caracteres"
-    const val ERROR_ONLY_NUMBERS = "El ID debe contener solo numeros"
-    const val ERROR_MAC_ADDRESS = "Mac Address mal escrito"
-    const val ERROR_ARDUINO = "IP del arduino mal escrita"
+
 
     /*******************Recorder*******************/
 
@@ -119,20 +119,16 @@ object Constants {
     /*************Socket CMD MANAGER**************/
 
     const val ACTION_OPEN_LOCK = "openLock"
-    const val ACTION_CONFIG = "config"
     const val ACTION_NEW_CODE = "newCode"
     const val ACTION_SET_CARD = "setCard"
     const val ACTION_OPEN_PORTAL = "openPortal"
     const val ACTION_SYNC_TIME = "syncTime"
-    const val ACTION_GET_BATTERY = "getBattery"
-    const val ACTION_TIME_SYNCHRONIZED = "timeSynchronized"
 
     /*****************ACTION MANAGER*****************/
 
     const val OPEN_LOCK = 0
     const val NEW_CODE = 1
     const val SET_CARD = 2
-    const val OPEN_PORTAL = 3
     const val SYNC_TIME = 4
     const val READ_RECORD = 5
     const val GET_BATTERY = 6
