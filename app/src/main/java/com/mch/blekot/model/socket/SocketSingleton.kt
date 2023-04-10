@@ -162,7 +162,6 @@ class SocketSingleton private constructor() {
 
                 }
             } catch (e: ValidateException) {
-                isProcessActive = false
                 socket.emit(
                     Constants.RESPONSE_SOCKET_BLUETOOTH,
                     Constants.ID,
@@ -170,14 +169,12 @@ class SocketSingleton private constructor() {
                 )
             } catch (e: java.lang.NullPointerException) {
                 Log.i(TAG, "error: ${e.printStackTrace()}")
-                isProcessActive = false
                 ActionManager.sendResponseToServer(
                     Constants.CODE_MSG_NULL_POINT,
                     Constants.STATUS_LOCK,
                     Constants.STATUS_LOCK
                 )
             } catch (e: Exception) {
-                isProcessActive = false
                 e.printStackTrace()
                 ActionManager.sendResponseToServer(
                     Constants.CODE_MSG_KO,
@@ -190,15 +187,6 @@ class SocketSingleton private constructor() {
         socket.connect()
     }
 
-    //coroutines
-    private fun executeAction(block: suspend () -> Unit): Job {
-        return MainScope().launch(Dispatchers.IO) {
-            try {
-                block()
-            }catch (_: Exception){}
-        }
-    }
-
     fun emitResponse(msg: String){
         socket.emit(
             Constants.RESPONSE_SOCKET_BLUETOOTH,
@@ -206,6 +194,16 @@ class SocketSingleton private constructor() {
             msg
         )
         isProcessActive = false
+    }
+
+
+    //coroutines
+    private fun executeAction(block: suspend () -> Unit): Job {
+        return MainScope().launch(Dispatchers.IO) {
+            try {
+                block()
+            }catch (_: Exception){}
+        }
     }
 
     companion object {

@@ -193,7 +193,6 @@ object Ble {
             for (char in characteristic.value) {
                 charArray += char.toUByte().toInt()
             }
-
             readCharacteristics(charArray)
         }
 
@@ -201,9 +200,6 @@ object Ble {
         private fun readCharacteristics(characteristic: Array<Int>) {
             executeAction {
                 var statusResponse = -1
-
-
-                Log.i("Characteristics", "1: ${characteristic}}")
 
                 if (characteristic[0] == 85) {
                     when (characteristic[1]) {
@@ -232,7 +228,6 @@ object Ble {
             }
         }
 
-        // TODO: catch lock's errors like motor and wrong response
     }
 
     @SuppressLint("MissingPermission")
@@ -257,7 +252,6 @@ object Ble {
     fun writeChar(gatt: BluetoothGatt) {
         val dataIn = HexUtil.hexStringToBytes(mCode)
         mDataQueue = HexUtil.splitByte(dataIn!!, Constants.MAX_SEND_DATA)
-        Log.i(TAG, "SIZE: ${mDataQueue.size}")
         writeDataDevice(gatt)
     }
 
@@ -270,13 +264,11 @@ object Ble {
 
             characteristicWrite = gatt.getService(SERVICE_UUID).getCharacteristic(WRITE_CHARACTER)
             characteristicWrite!!.value = data
-            Log.i(TAG, "Sending: ${HexUtil.formatHexString(characteristicWrite!!.value, true)}")
             characteristicWrite!!.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
             gatt.writeCharacteristic(characteristicWrite)
             counter++
         }
     }
-
 
     //Coroutines
     private fun executeAction(block: suspend () -> Unit): Job {
