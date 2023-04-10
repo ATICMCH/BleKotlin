@@ -68,9 +68,12 @@ object Constants {
     const val PARAMETER_DEVICE_NAME ="deviceName"
     const val PARAMETER_CODE = "code"
     const val PARAMETER_DAYS = "days"
+    const val PARAMETER_INDEX = "index"
+    const val PARAMETER_TIMES = "times"
     const val PARAMETER_QR = "Qr"
     const val PARAMETER_TYPE = "type"
     const val PARAMETER_IP_ARDUINO = "ipArduino"
+    const val PARAMETER_SYNC_TIME = "syncTime"
 
     /********************ForBLE********************/
 

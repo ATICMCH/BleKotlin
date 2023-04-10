@@ -54,9 +54,9 @@ class SocketSingleton private constructor() {
                 val pDataJson = ProcessDataJson()
                 pDataJson.getData(dataJson)
 
-                val action = Objects.requireNonNull(pDataJson.getValue("cmd"))
+                val action = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_CMD))
                     .toString()
-                clientFromServer = Objects.requireNonNull(pDataJson.getValue("clientFrom"))
+                clientFromServer = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_CLIENT_FROM))
                     .toString()
                 isProcessActive = true
 
@@ -73,13 +73,13 @@ class SocketSingleton private constructor() {
                     Constants.ACTION_OPEN_LOCK -> executeAction {
 
                         val macAddress =
-                            Objects.requireNonNull(pDataJson.getValue("macAddress")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_MAC_ADDRESS)).toString()
 
                         val deviceName =
-                            Objects.requireNonNull(pDataJson.getValue("deviceName")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_NAME)).toString()
 
                         val deviceId =
-                            Objects.requireNonNull(pDataJson.getValue("deviceId")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_ID)).toString()
 
                         ValidateUtil.setUpBle(macAddress, deviceName, deviceId)
 
@@ -89,26 +89,26 @@ class SocketSingleton private constructor() {
                     Constants.ACTION_NEW_CODE -> {
 
                         val macAddress =
-                            Objects.requireNonNull(pDataJson.getValue("macAddress")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_MAC_ADDRESS)).toString()
 
                         val deviceName =
-                            Objects.requireNonNull(pDataJson.getValue("deviceName")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_NAME)).toString()
 
                         val deviceId =
-                            Objects.requireNonNull(pDataJson.getValue("deviceId")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_ID)).toString()
 
                         ValidateUtil.setUpBle(macAddress, deviceName, deviceId)
 
-                        val code = Objects.requireNonNull(pDataJson.getValue("code"))
+                        val code = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_CODE))
                             .toString()
-                        var days = Objects.requireNonNull(pDataJson.getValue("days"))
+                        var days = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DAYS))
                             .toString().toInt()
                         days = if (days == 0) Constants.MIN_DAYS_PASSWORD else days
 
                         val index =
-                            Objects.requireNonNull(pDataJson.getValue("index")).toString().toInt()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_INDEX)).toString().toInt()
                         val times =
-                            Objects.requireNonNull(pDataJson.getValue("times")).toString().toInt()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_TIMES)).toString().toInt()
 
                         executeAction { ActionManager.setNewCode(code, days, index, times) }
                     }
@@ -116,26 +116,26 @@ class SocketSingleton private constructor() {
                     Constants.ACTION_SET_CARD -> {
 
                         val macAddress =
-                            Objects.requireNonNull(pDataJson.getValue("macAddress")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_MAC_ADDRESS)).toString()
 
                         val deviceName =
-                            Objects.requireNonNull(pDataJson.getValue("deviceName")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_NAME)).toString()
 
                         val deviceId =
-                            Objects.requireNonNull(pDataJson.getValue("deviceId")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_ID)).toString()
 
                         ValidateUtil.setUpBle(macAddress, deviceName, deviceId)
 
-                        val qr = Objects.requireNonNull(pDataJson.getValue("Qr"))
+                        val qr = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_QR))
                             .toString()
-                        val type = Objects.requireNonNull(pDataJson.getValue("type"))
+                        val type = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_TYPE))
                             .toString()
                         executeAction { ActionManager.setNewCard(qr, type) }
                     }
 
                     Constants.ACTION_OPEN_PORTAL -> executeAction {
                         val ipArduino =
-                            Objects.requireNonNull(pDataJson.getValue("ipArduino")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_IP_ARDUINO)).toString()
 
                         ValidateUtil.setUpArduino(ipArduino)
 
@@ -145,17 +145,17 @@ class SocketSingleton private constructor() {
                     Constants.ACTION_SYNC_TIME -> {
 
                         val macAddress =
-                            Objects.requireNonNull(pDataJson.getValue("macAddress")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_MAC_ADDRESS)).toString()
 
                         val deviceName =
-                            Objects.requireNonNull(pDataJson.getValue("deviceName")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_NAME)).toString()
 
                         val deviceId =
-                            Objects.requireNonNull(pDataJson.getValue("deviceId")).toString()
+                            Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_DEVICE_ID)).toString()
 
                         ValidateUtil.setUpBle(macAddress, deviceName, deviceId)
 
-                        val newTime = Objects.requireNonNull(pDataJson.getValue("syncTime"))
+                        val newTime = Objects.requireNonNull(pDataJson.getValue(Constants.PARAMETER_SYNC_TIME))
                             .toString()
                         executeAction { ActionManager.syncTime(newTime) }
                     }
@@ -199,6 +199,14 @@ class SocketSingleton private constructor() {
         }
     }
 
+    fun emitResponse(msg: String){
+        socket.emit(
+            Constants.RESPONSE_SOCKET_BLUETOOTH,
+            Constants.ID,
+            msg
+        )
+        isProcessActive = false
+    }
 
     companion object {
         private val TAG = SocketService::class.java.simpleName

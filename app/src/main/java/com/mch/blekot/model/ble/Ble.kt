@@ -249,7 +249,6 @@ object Ble {
             mCode = code
             writeChar(gattTmp)
         } catch (e: Exception) {
-            Log.e(TAG, e.message.toString())
             ActionManager.sendResponseToServer(status = Constants.CODE_MSG_KO)
             gattTmp.close()
         }

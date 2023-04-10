@@ -167,11 +167,9 @@ object ActionManager : ActionManagerAux {
 
         Log.i("ResponseJson", "$responseJson ")
 
-        SocketSingleton.socketInstance?.socket?.emit(
-            Constants.RESPONSE_SOCKET_BLUETOOTH,
-            Constants.ID,
+        SocketSingleton.socketInstance?.emitResponse(
             responseJson
         )
-        SocketSingleton.socketInstance?.isProcessActive = false
+
     }
 }
