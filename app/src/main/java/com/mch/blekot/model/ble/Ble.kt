@@ -46,11 +46,16 @@ object Ble {
     //No chequeamos si el adapter existe o no ya que sabemos con certeza que los dispositivos
     //utilizados cuentan con Bluetooth
     @SuppressLint("MissingPermission")
-    suspend fun connectDevice(isOnlyAsk: Boolean = false) = withContext(Dispatchers.IO) {
+    suspend fun connectDevice() = withContext(Dispatchers.IO) {
 
         mCode = "5530"
-        //Only battery status ask
-        Ble.isOnlyAsk = isOnlyAsk
+
+        if(!isBluetoothEnabled()){
+            ActionManager.sendResponseToServer(Constants.STATUS_BLE_DISCONNECT)
+
+            return@withContext
+        }
+
         var isPaired = false
         var macAddress = ""
 
@@ -268,6 +273,10 @@ object Ble {
             gatt.writeCharacteristic(characteristicWrite)
             counter++
         }
+    }
+
+    private fun isBluetoothEnabled(): Boolean {
+        return bluetoothAdapter!!.isEnabled
     }
 
     //Coroutines

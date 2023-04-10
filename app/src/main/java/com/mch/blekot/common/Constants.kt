@@ -96,6 +96,7 @@ object Constants {
     const val CODE_MSG_PARAMS = 2
     const val CODE_MSG_KO = -1
     const val CODE_MSG_NULL_POINT = -1
+    const val STATUS_BLE_DISCONNECT = 4
 
     const val STATUS_LOCK = -1
     const val STATUS_ARDUINO_OK = 1
