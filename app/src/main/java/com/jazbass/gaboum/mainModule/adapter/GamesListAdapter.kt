@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.databinding.ItemGameBinding
-import com.jazbass.gaboum.common.entities.GaboumEntity
+import com.jazbass.gaboum.common.entities.GameEntity
 
 class GamesListAdapter(private var listener: OnClickListener) :
-    ListAdapter<GaboumEntity, RecyclerView.ViewHolder>(GaboumDiffCallback()) {
+    ListAdapter<GameEntity, RecyclerView.ViewHolder>(GaboumDiffCallback()) {
 
     private lateinit var mContext: Context
 
@@ -26,13 +26,13 @@ class GamesListAdapter(private var listener: OnClickListener) :
         TODO("Not yet implemented")
     }
 
-    class GaboumDiffCallback : DiffUtil.ItemCallback<GaboumEntity>() {
+    class GaboumDiffCallback : DiffUtil.ItemCallback<GameEntity>() {
 
-        override fun areItemsTheSame(oldItem: GaboumEntity, newItem: GaboumEntity): Boolean {
+        override fun areItemsTheSame(oldItem: GameEntity, newItem: GameEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: GaboumEntity, newItem: GaboumEntity): Boolean {
+        override fun areContentsTheSame(oldItem: GameEntity, newItem: GameEntity): Boolean {
             return oldItem == newItem
         }
 

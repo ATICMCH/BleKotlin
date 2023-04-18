@@ -1,27 +1,26 @@
 package com.jazbass.gaboum.common.database
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.jazbass.gaboum.common.entities.GaboumEntity
+import com.jazbass.gaboum.common.entities.GameEntity
 
 interface GaboumDao {
 
     @Query("SELECT * FROM GaboumEntity")
-    suspend fun getAllGames(): LiveData<MutableList<GaboumEntity>>
+    fun getAllGames(): LiveData<MutableList<GameEntity>>
 
     @Query("SELECT * FROM GameEntity WHERE id = :id")
-    suspend fun getGame(): LiveData<GaboumEntity>
+    fun getGameById(id: Long): LiveData<GameEntity>
 
     @Insert
-    suspend fun addGame(gaboumEntity: GaboumEntity) : Long
+    suspend fun addGame(gaboumEntity: GameEntity): Long
 
     @Update
-    suspend fun updateGame(gaboumEntity: GaboumEntity) : Int
+    suspend fun updateGame(gaboumEntity: GameEntity): Int
 
     @Delete
-    suspend fun deleteGame(gaboumEntity: GaboumEntity) : Int
+    suspend fun deleteGame(gaboumEntity: GameEntity): Int
 }

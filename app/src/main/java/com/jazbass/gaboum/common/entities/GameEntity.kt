@@ -2,7 +2,7 @@ package com.jazbass.gaboum.common.entities
 
 import androidx.room.PrimaryKey
 
-data class GaboumEntity(
+data class GameEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
     var player1: String,
