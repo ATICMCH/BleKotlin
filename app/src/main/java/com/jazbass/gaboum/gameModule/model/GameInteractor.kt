@@ -1,25 +1,25 @@
 package com.jazbass.gaboum.gameModule.model
 
 import androidx.lifecycle.LiveData
-import com.jazbass.gaboum.GaboumApplication
+import com.jazbass.gaboum.GameApplication
 import com.jazbass.gaboum.common.entities.GameEntity
 
 class GameInteractor {
 
     fun getGameById(id: Long): LiveData<GameEntity> {
-        return GaboumApplication.database.gaboumDao().getGameById(id)
+        return GameApplication.database.gaboumDao().getGameById(id)
     }
 
     fun getAllGames(): LiveData<MutableList<GameEntity>> {
-        return GaboumApplication.database.gaboumDao().getAllGames()
+        return GameApplication.database.gaboumDao().getAllGames()
     }
 
     suspend fun saveGame(gameEntity: GameEntity) {
-        GaboumApplication.database.gaboumDao().addGame(gameEntity)
+        GameApplication.database.gaboumDao().addGame(gameEntity)
     }
 
     suspend fun updateGame(gameEntity: GameEntity) {
-        GaboumApplication.database.gaboumDao().updateGame(gameEntity)
+        GameApplication.database.gaboumDao().updateGame(gameEntity)
     }
 
 }

@@ -2,19 +2,19 @@ package com.jazbass.gaboum
 
 import android.app.Application
 import androidx.room.Room
-import com.jazbass.gaboum.common.database.GaboumDatabase
+import com.jazbass.gaboum.common.database.GameDatabase
 
-class GaboumApplication : Application() {
+class GameApplication : Application() {
 
     companion object{
-        lateinit var database: GaboumDatabase
+        lateinit var database: GameDatabase
     }
 
     override fun onCreate() {
         super.onCreate()
         database = Room.databaseBuilder(
             this,
-            GaboumDatabase::class.java,
+            GameDatabase::class.java,
             "GaboumDatabase"
         ).build()
     }

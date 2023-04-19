@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.jazbass.gaboum.common.entities.GameEntity
 
-interface GaboumDao {
+interface GameDao {
 
     @Query("SELECT * FROM GaboumEntity")
     fun getAllGames(): LiveData<MutableList<GameEntity>>

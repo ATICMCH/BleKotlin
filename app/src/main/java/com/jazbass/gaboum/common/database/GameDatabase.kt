@@ -5,6 +5,6 @@ import androidx.room.RoomDatabase
 import com.jazbass.gaboum.common.entities.GameEntity
 
 @Database(entities = [GameEntity::class], version = 1)
-abstract class GaboumDatabase: RoomDatabase() {
-    abstract fun gaboumDao(): GaboumDao
+abstract class GameDatabase: RoomDatabase() {
+    abstract fun gaboumDao(): GameDao
 }
