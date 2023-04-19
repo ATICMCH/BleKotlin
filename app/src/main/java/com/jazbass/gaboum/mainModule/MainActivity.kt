@@ -1,14 +1,16 @@
 package com.jazbass.gaboum.mainModule
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
 import com.jazbass.gaboum.R
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.jazbass.gaboum.common.entities.GameEntity
-import com.jazbass.gaboum.databinding.ActivityMainBinding
-import com.jazbass.gaboum.mainModule.adapter.GamesListAdapter
-import com.jazbass.gaboum.mainModule.adapter.OnClickListener
+import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jazbass.gaboum.mainModule.model.MainInteractor
+import com.jazbass.gaboum.databinding.ActivityMainBinding
+import com.jazbass.gaboum.mainModule.adapter.OnClickListener
+import com.jazbass.gaboum.mainModule.adapter.GamesListAdapter
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -49,6 +51,16 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     override fun onDeleteGame(gameEntity: GameEntity) {
+        val items = resources.getStringArray(R.array.array_options_items)
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Eliminar partida?")
+            .setItems(items){_, i ->
+                when(i){
+                    0 -> confirmDelete(gameEntity)
+                    1 -> onBackPressed()
+                }
+            }.show()
 
     }
 

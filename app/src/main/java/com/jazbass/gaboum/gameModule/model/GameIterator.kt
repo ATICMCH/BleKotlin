@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.jazbass.gaboum.GameApplication
 import com.jazbass.gaboum.common.entities.GameEntity
 
-class GameInteractor {
+class GameIterator {
 
     fun getGameById(id: Long): LiveData<GameEntity> {
         return GameApplication.database.gaboumDao().getGameById(id)
