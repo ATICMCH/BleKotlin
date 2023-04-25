@@ -6,5 +6,5 @@ import com.jazbass.gaboum.common.entities.GameEntity
 
 @Database(entities = [GameEntity::class], version = 1)
 abstract class GameDatabase: RoomDatabase() {
-    abstract fun gaboumDao(): GameDao
+    abstract fun gameDao(): GameDao
 }

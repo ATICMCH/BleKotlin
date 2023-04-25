@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.databinding.ItemGameBinding
 
-class GamesListAdapter(private var listener: OnClickListener) :
+class GamesListAdapter(private var games: MutableList<GameEntity>,private var listener: OnClickListener) :
     ListAdapter<GameEntity, RecyclerView.ViewHolder>(GameDiffCallback()) {
 
     private lateinit var mContext: Context
@@ -23,7 +23,17 @@ class GamesListAdapter(private var listener: OnClickListener) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        val game = games[position]
+
+        with(holder){
+            /*todo: Esta parte hay que entenderla bien, para que sirve el holder y la logica
+               para setear el listener*/
+        }
+    }
+
+    fun setGames(games: MutableList<GameEntity>) {
+        this.games = games 
+        notifyDataSetChanged()
     }
 
     class GameDiffCallback : DiffUtil.ItemCallback<GameEntity>() {

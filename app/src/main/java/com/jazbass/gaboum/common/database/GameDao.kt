@@ -1,15 +1,13 @@
 package com.jazbass.gaboum.common.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.jazbass.gaboum.common.entities.GameEntity
 
+@Dao
 interface GameDao {
 
-    @Query("SELECT * FROM GaboumEntity")
+    @Query("SELECT * FROM GameEntity")
     fun getAllGames(): LiveData<MutableList<GameEntity>>
 
     @Query("SELECT * FROM GameEntity WHERE id = :id")

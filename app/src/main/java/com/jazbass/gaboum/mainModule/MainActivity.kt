@@ -2,15 +2,18 @@ package com.jazbass.gaboum.mainModule
 
 import android.os.Bundle
 import com.jazbass.gaboum.R
-import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AppCompatActivity
+import com.jazbass.gaboum.gameModule.GameFragment
 import com.jazbass.gaboum.common.entities.GameEntity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jazbass.gaboum.mainModule.model.MainInteractor
 import com.jazbass.gaboum.databinding.ActivityMainBinding
+import com.jazbass.gaboum.mainModule.viewModel.MainViewModel
+import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.jazbass.gaboum.mainModule.adapter.OnClickListener
 import com.jazbass.gaboum.mainModule.adapter.GamesListAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -19,12 +22,18 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var mGridLayout: GridLayoutManager
 
     private val mainInteractor = MainInteractor()
+    private lateinit var mainViewModel: MainViewModel
+
+    private lateinit var gameViewModel: GameViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mBinding.btnFab.setOnClickListener { launchGameFragment() }
 
         setUpRecyclerView()
+        setUpViewModel()
+
     }
 
     private fun setUpRecyclerView() {
@@ -38,11 +47,24 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
+    private fun setUpViewModel(){
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mainViewModel.getGames().observe(this){ games ->
+            mAdapter.setGames(games)
+        }
+
+        gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
+    }
+
     private fun launchGameFragment(gameEntity: GameEntity? = GameEntity()){
-        if (gameEntity?.id == 0L ){
-            //New game
-        }else{
-            //Edit game
+        val fragment = GameFragment()
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+
+        with(transaction){
+            add(R.id.containerMain, fragment)
+            addToBackStack(null)
+            commit()
         }
     }
 
@@ -67,6 +89,4 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun confirmDelete(gameEntity: GameEntity){
 
     }
-
-
 }
