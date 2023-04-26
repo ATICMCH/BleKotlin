@@ -18,6 +18,7 @@ import com.mch.blekot.databinding.ActivityMainBinding
 import com.mch.blekot.model.Interactor
 import com.mch.blekot.model.ble.Ble
 import com.mch.blekot.model.socket.SocketSingleton
+import com.mch.blekot.services.MicroService
 import com.mch.blekot.services.SocketService
 import com.vmadalin.easypermissions.EasyPermissions
 import kotlinx.coroutines.MainScope
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        launchSocketService()
+        //launchSocketService()
+        launchMicroService()
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -109,10 +111,10 @@ class MainActivity : AppCompatActivity() {
         instance = this
     }
 
-//    private fun launchMicroService(){
-//        val intent = Intent(applicationContext, MicroService::class.java)
-//        startService(intent)
-//    }
+    private fun launchMicroService(){
+        val intent = Intent(applicationContext, MicroService::class.java)
+        startService(intent)
+    }
 
     private fun launchSocketService() {
         val filter = IntentFilter(ACTION_RUN_SERVICE)
