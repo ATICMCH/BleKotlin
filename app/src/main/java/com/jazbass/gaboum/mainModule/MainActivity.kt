@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun setUpRecyclerView() {
-        mAdapter = GamesListAdapter(this)
+        mAdapter = GamesListAdapter(mutableListOf(),this) //todo: Por que paso un array vacio?
         mGridLayout = GridLayoutManager(this, 1)
 
         mBinding.recyclerView.apply {

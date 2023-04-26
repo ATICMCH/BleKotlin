@@ -7,19 +7,19 @@ import com.jazbass.gaboum.common.entities.GameEntity
 class GameIterator {
 
     fun getGameById(id: Long): LiveData<GameEntity> {
-        return GameApplication.database.gaboumDao().getGameById(id)
+        return GameApplication.database.gameDao().getGameById(id)
     }
 
     fun getAllGames(): LiveData<MutableList<GameEntity>> {
-        return GameApplication.database.gaboumDao().getAllGames()
+        return GameApplication.database.gameDao().getAllGames()
     }
 
     suspend fun saveGame(gameEntity: GameEntity) {
-        GameApplication.database.gaboumDao().addGame(gameEntity)
+        GameApplication.database.gameDao().addGame(gameEntity)
     }
 
     suspend fun updateGame(gameEntity: GameEntity) {
-        GameApplication.database.gaboumDao().updateGame(gameEntity)
+        GameApplication.database.gameDao().updateGame(gameEntity)
     }
 
 }
