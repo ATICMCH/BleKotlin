@@ -209,11 +209,10 @@ object JsonManager {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun getTime(): String {
+     fun getTime(): String {
 
         val cal = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
 
         return dateFormat.format(cal.time)
     }

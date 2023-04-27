@@ -1,28 +1,25 @@
 package com.mch.blekot
 
-import android.Manifest.permission.*
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.Bundle
 import android.util.Log
+import android.os.Bundle
 import android.view.View
+import android.content.Intent
+import android.content.Context
+import kotlinx.coroutines.launch
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.transition.Visibility
-import com.mch.blekot.common.Constants
-import com.mch.blekot.databinding.ActivityMainBinding
+import kotlinx.coroutines.MainScope
+import android.content.IntentFilter
+import android.Manifest.permission.*
 import com.mch.blekot.model.Interactor
-import com.mch.blekot.model.ble.Ble
-import com.mch.blekot.model.socket.SocketSingleton
+import com.mch.blekot.common.Constants
+import android.content.BroadcastReceiver
 import com.mch.blekot.services.MicroService
 import com.mch.blekot.services.SocketService
+import androidx.appcompat.app.AppCompatActivity
 import com.vmadalin.easypermissions.EasyPermissions
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import com.mch.blekot.databinding.ActivityMainBinding
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 
 class MainActivity : AppCompatActivity() {
 
