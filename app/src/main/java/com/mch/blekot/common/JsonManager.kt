@@ -212,7 +212,7 @@ object JsonManager {
      fun getTime(): String {
 
         val cal = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy-HH:mm:ss", Locale.ENGLISH)
 
         return dateFormat.format(cal.time)
     }

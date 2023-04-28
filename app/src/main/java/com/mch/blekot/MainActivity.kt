@@ -13,13 +13,13 @@ import android.Manifest.permission.*
 import com.mch.blekot.model.Interactor
 import com.mch.blekot.common.Constants
 import android.content.BroadcastReceiver
-import com.mch.blekot.services.MicroService
 import com.mch.blekot.services.SocketService
 import androidx.appcompat.app.AppCompatActivity
 import com.vmadalin.easypermissions.EasyPermissions
 import com.mch.blekot.databinding.ActivityMainBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import com.mch.blekot.services.MicroService
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private val ACTION_MEMORY_EXIT = "com.mch.blekot.services.action.MEMORY_EXIT"
 
     private lateinit var mBinding: ActivityMainBinding
+    private val fragment = InfoFragment()
 
     override
     fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mBinding.root)
 
         //launchSocketService()
-        launchMicroService()
+
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -48,9 +49,15 @@ class MainActivity : AppCompatActivity() {
         mBinding.btnLaunchScan.setOnClickListener {
             MainScope().launch { Interactor.openLock() }
         }
+
+        launchMicro()
     }
 
-    private val fragment = InfoFragment()
+    private fun launchMicro(){
+        MicroService.setContext(this)
+        MicroService.setUpRecorder()
+        MicroService.launchDecibelsMeasure()
+    }
 
     private fun launchInfoFragment() {
 

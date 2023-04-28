@@ -1,81 +1,85 @@
 package com.mch.blekot.services
 
-import java.util.*
+import android.content.Context
 import java.io.File
 import java.net.Socket
 import android.util.Log
-import kotlinx.coroutines.*
 import java.io.FileInputStream
 import java.io.DataOutputStream
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.CountDownTimer
 import java.io.BufferedInputStream
 import com.mch.blekot.common.Constants
 import com.mch.blekot.common.JsonManager
-import java.text.Format
-import java.text.SimpleDateFormat
 
-class Recorder(val path: String) {
+const val TAG = "RECORDER"
 
-    private var recorder: MediaRecorder? = null
-    private var fileName: String? = null
+class Recorder(private var recorder: MediaRecorder?, private val mContext: Context) {
+
     private var localPath = ""
-    private var TAG = "RECORDER"
-
     private var isRecording = false
 
-    fun startRecord() {
 
-        recorder = MediaRecorder()// TODO: Esta deprecated, buscar forma correcta
-        recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
-        recorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        localPath = path
-            localPath += if (fileName == null) {
-                "/Recorder_" + UUID.randomUUID()
-                    .toString() + "${Constants.ID}, ${JsonManager.getTime()}, .m4a"
-            } else {
-                fileName
-            }
-        recorder?.setOutputFile(localPath)
-        recorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+    //    fun startRecord() {
+//        with(recorder) {
+//            setOutputFile(localPath)
+//            try {
+//                prepare()
+//                start()
+//            } catch (e: Error) {
+//                e.printStackTrace()
+//                isRecording = false
+//                return
+//            }
+//            isRecording = true
+//        }
+//    }
+    private val destPath: String =
+        mContext?.applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
+
+
+    fun startRecorder() {
+        localPath = destPath
+        localPath += "/prueba.m4a"
+
+        Log.i(TAG, localPath)
+        recorder = MediaRecorder()
         try {
-            recorder?.prepare()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            isRecording = false
-            return
+            with(recorder!!) {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                setOutputFile(localPath)
+                prepare()
+                start()
+            }
+            Log.i(TAG, "Start Recorder")
+        } catch (e: Exception) {
+            Log.e(TAG, "SecurityException: " + Log.getStackTraceString(e))
         }
-        recorder?.start()
-        isRecording = true
-    }
-
-    private fun reset() {
-        if (recorder != null) {
-            recorder?.release()
-            recorder = null
-            isRecording = false
-        }
+        Thread.sleep(30000)
+        stopRecording()
     }
 
     private fun stopRecording() {
-        reset()
         try {
             Thread.sleep(150)
             recorder?.stop()
-            recorder?.release()
-            recorder = null
+            recorder?.release()//Todo: esto puede quitar la configuracion de
             isRecording = false
 
             Log.i(TAG, "path: $localPath")
 
             injectMedia(localPath)
+            Log.i(TAG, "Stop Recorder")
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     /******** Para probar si se guardo bien el audio **********/
-    var player: MediaPlayer? = MediaPlayer()
+    private var player: MediaPlayer? = MediaPlayer()
 
     fun resetMediaPlayer() {
         if (player != null) {
@@ -89,11 +93,12 @@ class Recorder(val path: String) {
             player!!.setDataSource(audioUri)
             player!!.prepare()
             player!!.setOnCompletionListener {
-                //mediaPlayListener?.onStopMedia() todo: que hace esto
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        startPlaying()
     }
 
     private fun startPlaying() {
