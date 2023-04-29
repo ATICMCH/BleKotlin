@@ -74,10 +74,11 @@ object MicroService {
          */
 
         mEMA = EMA_FILTER * amplitude + (1.0 - EMA_FILTER) * mEMA
-        //Asumiendo que la presión de referencia mínima es 0.000085 Pascal
-        // (en la mayoría de los teléfonos) es igual a 0 db
-        // TODO: Find out the minimum reference in Redmi
-        // return 20 * (float) Math.log10((mEMAValue / 51805.5336) / 0.000028251);
+        /*
+        Asumiendo que la presión de referencia mínima es 0.000085 Pascal
+        (en la mayoría de los teléfonos) es igual a 0 db
+        return 20 * (float) Math.log10((mEMAValue / 51805.5336) / 0.000028251);
+        */
         return (20 * log10(mEMA / 51805.5336 / 0.000028251) * 100).roundToLong() / 100.0
     }
 

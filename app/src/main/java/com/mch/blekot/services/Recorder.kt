@@ -42,7 +42,7 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
     fun startRecorder() {
         localPath = destPath
         localPath += "/${Constants.ID}-${getTime()}.m4a"
-
+        //localPath += "prueba1.m4a"
         Log.i(TAG, localPath)
         recorder = MediaRecorder()
         try {
