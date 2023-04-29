@@ -4,6 +4,7 @@ import android.util.Log
 import kotlin.jvm.JvmOverloads
 import java.lang.RuntimeException
 import java.lang.StringBuilder
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
 import kotlin.math.roundToInt
@@ -65,27 +66,6 @@ object HexUtil {
         return sb.toString().trim { it <= ' ' }
     }
 
-    fun decodeHex(data: CharArray): ByteArray {
-        val len = data.size
-        if (len and 0x01 != 0) {
-            throw RuntimeException("Odd number of characters.")
-        }
-        val out = ByteArray(len shr 1)
-
-        // two characters form the hex value.
-        var i = 0
-        var j = 0
-        while (j < len) {
-            var f = toDigit(data[j], j) shl 4
-            j++
-            f = f or toDigit(data[j], j)
-            j++
-            out[i] = (f and 0xFF).toByte()
-            i++
-        }
-        return out
-    }
-
     private fun toDigit(ch: Char, index: Int): Int {
         val digit = ch.digitToIntOrNull(16) ?: -1
         if (digit == -1) {
@@ -116,10 +96,6 @@ object HexUtil {
 
     private fun charToByte(c: Char): Byte {
         return "0123456789ABCDEF".indexOf(c).toByte()
-    }
-
-    fun extractData(data: ByteArray, position: Int): String? {
-        return formatHexString(byteArrayOf(data[position]))
     }
 
     fun splitByte(data: ByteArray, count: Int): Queue<ByteArray> {
@@ -154,6 +130,14 @@ object HexUtil {
         }
         return byteQueue
     }
+}
+
+fun getTime(): String {
+
+    val cal = Calendar.getInstance()
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy-HH:mm:ss", Locale.ENGLISH)
+
+    return dateFormat.format(cal.time)
 }
 
 private infix fun Byte.shl(that: Int): Int = this.toInt().shl(that)

@@ -12,6 +12,7 @@ import android.os.CountDownTimer
 import java.io.BufferedInputStream
 import com.mch.blekot.common.Constants
 import com.mch.blekot.common.JsonManager
+import com.mch.blekot.common.getTime
 
 const val TAG = "RECORDER"
 
@@ -20,8 +21,7 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
     private var localPath = ""
     private var isRecording = false
 
-
-    //    fun startRecord() {
+//    fun startRecord() {
 //        with(recorder) {
 //            setOutputFile(localPath)
 //            try {
@@ -36,12 +36,12 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
 //        }
 //    }
     private val destPath: String =
-        mContext?.applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
+        mContext.applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
 
 
     fun startRecorder() {
         localPath = destPath
-        localPath += "/prueba.m4a"
+        localPath += "/${Constants.ID}-${getTime()}.m4a"
 
         Log.i(TAG, localPath)
         recorder = MediaRecorder()
