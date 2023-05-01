@@ -28,12 +28,12 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        mBinding.btnFab.setOnClickListener { launchGameFragment() }
+
+        mBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         setUpRecyclerView()
         setUpViewModel()
-
     }
 
     private fun setUpRecyclerView() {
