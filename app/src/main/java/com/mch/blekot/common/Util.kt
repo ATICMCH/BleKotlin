@@ -11,12 +11,10 @@ import kotlin.math.roundToInt
 
 object HexUtil {
     private val DIGITS_LOWER = charArrayOf(
-        '0', '1', '2', '3', '4', '5',
-        '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
     )
     private val DIGITS_UPPER = charArrayOf(
-        '0', '1', '2', '3', '4', '5',
-        '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     )
 
     @JvmOverloads
@@ -132,10 +130,12 @@ object HexUtil {
     }
 }
 
+/**
+ * IMPORTANTE no utilizar slash / para separar los dias ni la hora ya que se utilizan como path*/
 fun getTime(): String {
 
     val cal = Calendar.getInstance()
-    val dateFormat = SimpleDateFormat("dd-MM-yyyy-HH:mm:ss", Locale.ENGLISH)
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.ENGLISH)
 
     return dateFormat.format(cal.time)
 }

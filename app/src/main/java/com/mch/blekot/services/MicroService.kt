@@ -1,13 +1,13 @@
 package com.mch.blekot.services
 
-import android.annotation.SuppressLint
-import android.content.Context
 import java.util.*
 import android.util.Log
 import kotlin.math.log10
 import kotlin.math.roundToLong
-import android.os.CountDownTimer
+import android.content.Context
 import android.media.MediaRecorder
+import android.annotation.SuppressLint
+import com.mch.blekot.model.Ewelink
 
 const val RUIDO_MIN = 10
 const val EMA_FILTER = 0.6
@@ -26,24 +26,24 @@ object MicroService {
 
     private lateinit var mContext: Context
 
-    fun setContext(context: Context){
+    fun setContext(context: Context) {
         mContext = context
     }
 
     fun setUpRecorder() {
         if (mRecorder == null) {
-            mRecorder = MediaRecorder()
-            with(mRecorder!!) {
+            mRecorder = MediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
                 setOutputFile("/dev/null")
+            }.also {
+                try {
+                    it.prepare()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
-        }
-        try {
-            mRecorder?.prepare()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -59,8 +59,12 @@ object MicroService {
     }
 
     fun launchDecibelsMeasure() {
-        mRecorder?.start()
-        runner?.start()
+        try {
+            mRecorder?.start()
+            runner?.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     /*----------------------------function for take ambient decibels----------------------------*/
@@ -95,17 +99,22 @@ object MicroService {
         }
     }
 
-    private fun noiseExceeded(){
-        //Ewelink.turnOffLight()
+    private fun noiseExceeded() {
+        //Ewelink.turnOffLight() //todo: consultar si la luz de encuentra apagada. EN TCP
         Log.i("dec", "turnOffLight: Aqui se apago la luz de sus ojos")
         decibelsHistory.clear();
         continueMeasure = false
 
-        mRecorder?.stop()
-        mRecorder?.release()
+        try {
+            mRecorder?.stop()
+            mRecorder?.release()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
-        val recorder = Recorder(mRecorder, mContext)
-        recorder.startRecorder()
+        Recorder(mRecorder, mContext).run {
+            startRecorder()
+        }
     }
 
     private fun decibelMedia(decHist: Stack<Double>): Double {

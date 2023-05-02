@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         //launchSocketService()
 
-
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         methodRequiresTwoPermission()
@@ -111,9 +110,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    init {
-        instance = this
-    }
+
 
     private fun launchMicroService(){
         val intent = Intent(applicationContext, MicroService::class.java)
@@ -159,6 +156,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    init {
+        instance = this
+    }
 
     companion object {
         private var instance: MainActivity? = null

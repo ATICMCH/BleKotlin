@@ -6,6 +6,9 @@
 ```
 Antes de instalar configurar en com.mch.blekot.common.Constants:
 * 'const val ID' con el nombre del piso al que irá para la conexion por socket, debe coincidir con el código del piso en BBDD
+
+En Android Studio luego de setear el ID en la pestaña Build, al hacer click en la sección Build Bundle / APK se genera el APK que
+podrá instalar en el móvil.
 ```
 ### Parámetros
     

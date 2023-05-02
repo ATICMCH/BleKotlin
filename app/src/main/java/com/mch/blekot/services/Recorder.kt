@@ -41,7 +41,7 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
 
     fun startRecorder() {
         localPath = destPath
-        localPath += "/${Constants.ID}-${getTime()}.m4a"
+        localPath += "/${Constants.ID}_${getTime()}.m4a"
         //localPath += "prueba1.m4a"
         Log.i(TAG, localPath)
         recorder = MediaRecorder()
@@ -66,7 +66,7 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
         try {
             Thread.sleep(150)
             recorder?.stop()
-            recorder?.release()//Todo: esto puede quitar la configuracion de
+            recorder?.release()
             isRecording = false
 
             Log.i(TAG, "path: $localPath")
