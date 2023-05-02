@@ -41,6 +41,7 @@ android {
  def room_version = "2.4.3"
  def lifecycle_version = "2.6.0-alpha03"
  def coroutines_version = "1.6.4"
+ def fragment_version = "1.5.5"
 
 dependencies {
 
@@ -52,6 +53,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //For fragment bundle functions
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     //Room
     implementation"androidx.room:room-runtime:$room_version"

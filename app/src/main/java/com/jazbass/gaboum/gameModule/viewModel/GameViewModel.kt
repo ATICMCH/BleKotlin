@@ -1,5 +1,6 @@
 package com.jazbass.gaboum.gameModule.viewModel
 
+import android.util.Log
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import androidx.lifecycle.LiveData
@@ -12,11 +13,12 @@ import com.jazbass.gaboum.gameModule.model.GameIterator
 class GameViewModel : ViewModel() {
 
     private val gameSelected = MutableLiveData<Long>()
-    private val interactor = GameIterator()
+    private val interactor: GameIterator = GameIterator()
     private val result = MutableLiveData<Any>()
 
     fun setGameSelected(id: Long){
-        gameSelected.value =id
+        gameSelected.value = id
+        Log.i("Game Selected", gameSelected.value.toString())
     }
 
     fun getGameSelected(): LiveData<GameEntity>{

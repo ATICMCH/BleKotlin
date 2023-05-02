@@ -6,7 +6,6 @@ import com.jazbass.gaboum.common.entities.GameEntity
 
 @Dao
 interface GameDao {
-
     @Query("SELECT * FROM GameEntity")
     fun getAllGames(): LiveData<MutableList<GameEntity>>
 

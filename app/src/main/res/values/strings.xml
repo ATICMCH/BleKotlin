@@ -16,4 +16,5 @@
     <string name="prompt_player1">Player 1</string>
     <string name="prompt_player2">Player 2</string>
     <string name="action_new_game">Start game</string>
+    <string name="button_start">Start</string>
 </resources>

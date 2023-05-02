@@ -14,6 +14,7 @@ import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.jazbass.gaboum.mainModule.adapter.OnClickListener
 import com.jazbass.gaboum.mainModule.adapter.GamesListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jazbass.gaboum.gameModule.NewGameFragment
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -32,12 +33,16 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
+        mBinding.btnFab.setOnClickListener {
+            launchNewGameFragment()
+        }
+
         setUpRecyclerView()
         setUpViewModel()
     }
 
     private fun setUpRecyclerView() {
-        mAdapter = GamesListAdapter(mutableListOf(),this) //todo: Por que paso un array vacio?
+        mAdapter = GamesListAdapter(mutableListOf(),this)
         mGridLayout = GridLayoutManager(this, 1)
 
         mBinding.recyclerView.apply {
@@ -57,7 +62,21 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun launchGameFragment(gameEntity: GameEntity? = GameEntity()){
+        gameViewModel.setGameSelected(gameEntity!!.id)
+
         val fragment = GameFragment()
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+
+        with(transaction){
+            add(R.id.containerMain, fragment)
+            addToBackStack(null)
+            commit()
+        }
+    }
+
+    private fun launchNewGameFragment(){
+        val fragment = NewGameFragment()
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
 

@@ -9,11 +9,13 @@
     android:paddingTop="@dimen/fragment_vertical_margin"
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
-    tools:context=".gameModule.ui.login.NewGameFragment">
+    tools:context=".gameModule.NewGameFragment">
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
         android:padding="@dimen/common_padding">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -52,6 +54,11 @@
                 android:inputType="textCapWords"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreateGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_start"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
