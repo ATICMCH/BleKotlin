@@ -5,10 +5,11 @@
 ### Importante
 ```
 Antes de instalar configurar en com.mch.blekot.common.Constants:
-* 'const val ID' con el nombre del piso al que irá para la conexion por socket, debe coincidir con el código del piso en BBDD
+* 'const val ID' con el nombre del piso al que irá para la conexion por socket, debe coincidir con el código
+ del piso en BBDD
 
-En Android Studio luego de setear el ID en la pestaña Build, al hacer click en la sección Build Bundle / APK se genera el APK que
-podrá instalar en el móvil.
+En Android Studio luego de setear el ID en la pestaña Build, al hacer click en la sección Build Bundle / APK 
+se genera el APK que podrá instalar en el móvil.
 ```
 ### Parámetros
     
@@ -60,16 +61,17 @@ pueden ser:
 -4 --> El bluetooth del móvil no está encendido
 -5 --> Se ha agotado el tiempo de escaneo de bluetooth
 -6 --> Se ha agotado el tiempo para procesar una petición
--7 --> Error en la respuesta de WeLock-API, puede que los parámetros sean erróneos o que la manija no esté activada
+-7 --> Error en la respuesta de WeLock-API, puede que los parámetros sean erróneos o que la manija no 
+esté activada
 ```
 ### Tiempos de espera
 ```
 Cada petición tiene un máximo de 3 minutos para ser gestionada, en caso de superar este tiempo se cancelará la 
 función y se avisará al TCP
 
-El escaneo tiene un máximo de duración de 30 segundos, por lo general no tarda más de 1 segundo en encontrar el 
-móvil, por lo que si este error se repite reiteradas veces es probable que haya un problema con la manija ya que
- el móvil no está localizándola.
+El escaneo tiene un máximo de duración de 30 segundos, por lo general no tarda más de 1 segundo en 
+encontrar el móvil, por lo que si este error se repite reiteradas veces es probable que haya un 
+problema con la manija ya que el móvil no está localizándola.
 ```
 
 
