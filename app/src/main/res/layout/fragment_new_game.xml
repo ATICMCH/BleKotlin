@@ -5,61 +5,70 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/fragment_horizontal_margin"
-    android:paddingTop="@dimen/fragment_vertical_margin"
-    android:paddingRight="@dimen/fragment_horizontal_margin"
-    android:paddingBottom="@dimen/fragment_vertical_margin"
+    android:background="#cdcdcdca"
     tools:context=".gameModule.NewGameFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/common_padding"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="50dp"
+        app:cardCornerRadius="15dp">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:gravity="center"
         android:padding="@dimen/common_padding">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilNamePlayer1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_player1"
-            app:endIconMode="clear_text"
-            app:counterMaxLength="@integer/counter_max_name"
-            app:counterEnabled="true"
-            app:startIconDrawable="@drawable/ic_player"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPlayer1"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNamePlayer1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="@integer/counter_max_name"
-                android:inputType="textCapWords"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/prompt_player1"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/counter_max_name"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_player">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilNamePlayer2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_player1"
-            app:endIconMode="clear_text"
-            app:counterMaxLength="@integer/counter_max_name"
-            app:counterEnabled="true"
-            app:startIconDrawable="@drawable/ic_player"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPlayer2"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlayer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:maxLength="@integer/counter_max_name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNamePlayer2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="@integer/counter_max_name"
-                android:inputType="textCapWords"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/prompt_player1"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/counter_max_name"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/ic_player">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCreateGame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_start"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlayer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:maxLength="@integer/counter_max_name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCreateGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_start" />
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
+</com.google.android.material.card.MaterialCardView>
 </androidx.core.widget.NestedScrollView>

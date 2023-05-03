@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.jazbass.gaboum.GameApplication
 import com.jazbass.gaboum.R
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.databinding.FragmentNewGameBinding
@@ -46,11 +47,14 @@ class NewGameFragment : Fragment() {
             scorePlayer1 = 0
             scorePlayer2 = 0
         }.also {
-            launchGameFragment(it)
+            saveGame(it)
+            launchGameFragment()
         }
     }
 
     private fun launchGameFragment(gameEntity: GameEntity = GameEntity()){
+
+
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
@@ -66,6 +70,14 @@ class NewGameFragment : Fragment() {
             replace(R.id.containerMain, fragment)
             addToBackStack(null)
             commit()
+        }
+    }
+
+    private fun saveGame(gameEntity: GameEntity) {
+        try{
+            gameViewModel.saveGame(gameEntity)
+        }catch (e: Exception){
+            e.printStackTrace()
         }
     }
 }

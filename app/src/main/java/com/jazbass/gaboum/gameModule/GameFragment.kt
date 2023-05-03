@@ -46,25 +46,25 @@ class GameFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        //gameViewModel.getGameSelected().observe(viewLifecycleOwner){
-        //    gameEntity = it ?: GameEntity()
-        //    if (it != null){
-        //        isEditMode = true
-        //        setUIGame(it)
-        //    }else{
-        //        isEditMode = false
-        //    }
-        //}
+        gameViewModel.getGameSelected().observe(viewLifecycleOwner){
+            gameEntity = it ?: GameEntity()
+            if (it != null){
+                isEditMode = true
+                setUIGame(it)
+            }else{
+                isEditMode = false
+            }
+        }
     }
 
     private fun setUIGame(gameEntity: GameEntity) {
-        Log.i("Players", "${gameEntity.player1}, ${gameEntity.player2}" )
-        with(binding){
-            txtPlayer1.text = gameEntity.player1.trim()
-            txtPlayer2.text = gameEntity.player2.trim()
-            txtScorePlayer1.text = gameEntity.scorePlayer1.toString().trim()
-            txtScorePlayer2.text = gameEntity.scorePlayer2.toString().trim()
-        }
+         with(binding){
+             txtPlayer1.text = gameEntity.player1
+             txtPlayer2.text = gameEntity.player2
+             txtScorePlayer1.text = gameEntity.scorePlayer1.toString().trim()
+             txtScorePlayer2.text = gameEntity.scorePlayer2.toString().trim()
+         }
     }
+
 
 }

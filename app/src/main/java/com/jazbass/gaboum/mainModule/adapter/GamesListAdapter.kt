@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.databinding.ItemGameBinding
 
-class GamesListAdapter(private var games: MutableList<GameEntity>,private var listener: OnClickListener) :
+class GamesListAdapter( private var listener: OnClickListener) :
     ListAdapter<GameEntity, RecyclerView.ViewHolder>(GameDiffCallback()) {
 
     private lateinit var mContext: Context
@@ -23,18 +23,33 @@ class GamesListAdapter(private var games: MutableList<GameEntity>,private var li
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val game = games[position]
+        val game = getItem(position)
 
-        with(holder){
-            /*todo: Esta parte hay que entenderla bien, para que sirve el holder y la logica
-               para setear el listener*/
+        with(holder as ViewHolder){
+            setListener(game)
+            with(binding){
+                player1.text = game.player1
+                player2.text = game.player2
+                scorePlayer1.text = game.scorePlayer1.toString().trim()
+                scorePlayer2.text = game.scorePlayer2.toString().trim()
+            }
         }
     }
 
-    fun setGames(games: MutableList<GameEntity>) {
-        this.games = games 
-        notifyDataSetChanged()
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+        val binding = ItemGameBinding.bind(view)
+
+        fun setListener(gameEntity: GameEntity){
+            with(binding.root){
+                setOnClickListener { listener.onClick(gameEntity) }
+                setOnLongClickListener{
+                    listener.onDeleteGame(gameEntity)
+                    true
+                }
+            }
+        }
     }
+
 
     class GameDiffCallback : DiffUtil.ItemCallback<GameEntity>() {
 
@@ -45,11 +60,6 @@ class GamesListAdapter(private var games: MutableList<GameEntity>,private var li
         override fun areContentsTheSame(oldItem: GameEntity, newItem: GameEntity): Boolean {
             return oldItem == newItem
         }
-
-    }
-
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val binding = ItemGameBinding.bind(view)
 
     }
 

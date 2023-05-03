@@ -5,4 +5,5 @@
     <dimen name="fragment_horizontal_margin">16dp</dimen>
     <dimen name="fragment_vertical_margin">16dp</dimen>
     <dimen name="common_padding">16dp</dimen>
+    <dimen name="card_padding">25dp</dimen>
 </resources>

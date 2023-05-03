@@ -6,8 +6,6 @@ import com.jazbass.gaboum.common.database.GameDatabase
 
 class GameApplication : Application() {
 
-    /**/
-
     companion object{
         lateinit var database: GameDatabase
     }

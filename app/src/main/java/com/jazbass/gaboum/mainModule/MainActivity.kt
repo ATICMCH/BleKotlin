@@ -1,6 +1,7 @@
 package com.jazbass.gaboum.mainModule
 
 import android.os.Bundle
+import android.util.Log
 import com.jazbass.gaboum.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +19,8 @@ import com.jazbass.gaboum.gameModule.NewGameFragment
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
-    private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: GamesListAdapter
+    private lateinit var mBinding: ActivityMainBinding
     private lateinit var mGridLayout: GridLayoutManager
 
     private val mainInteractor = MainInteractor()
@@ -29,7 +30,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun setUpRecyclerView() {
-        mAdapter = GamesListAdapter(mutableListOf(),this)
+        mAdapter = GamesListAdapter(this)
         mGridLayout = GridLayoutManager(this, 1)
 
         mBinding.recyclerView.apply {
@@ -55,24 +55,12 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun setUpViewModel(){
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mainViewModel.getGames().observe(this){ games ->
-            mAdapter.setGames(games)
+            Log.i("Games", "${games.size}")
+            mAdapter.submitList(games)
         }
 
         gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
-    }
 
-    private fun launchGameFragment(gameEntity: GameEntity? = GameEntity()){
-        gameViewModel.setGameSelected(gameEntity!!.id)
-
-        val fragment = GameFragment()
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-
-        with(transaction){
-            add(R.id.containerMain, fragment)
-            addToBackStack(null)
-            commit()
-        }
     }
 
     private fun launchNewGameFragment(){
@@ -89,6 +77,20 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
     override fun onClick(gameEntity: GameEntity) {
         launchGameFragment(gameEntity)
+    }
+
+    private fun launchGameFragment(gameEntity: GameEntity? = GameEntity()){
+        gameViewModel.setGameSelected(gameEntity!!.id)
+
+        val fragment = GameFragment()
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+
+        with(transaction){
+            add(R.id.containerMain, fragment)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     override fun onDeleteGame(gameEntity: GameEntity) {

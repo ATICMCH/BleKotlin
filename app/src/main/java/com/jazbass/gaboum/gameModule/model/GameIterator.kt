@@ -1,5 +1,6 @@
 package com.jazbass.gaboum.gameModule.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.jazbass.gaboum.GameApplication
 import com.jazbass.gaboum.common.entities.GameEntity
@@ -15,7 +16,9 @@ class GameIterator {
     }
 
     suspend fun saveGame(gameEntity: GameEntity) {
-        GameApplication.database.gameDao().addGame(gameEntity)
+        GameApplication.database.gameDao().addGame(gameEntity).also {
+            Log.i("NewGame", "saveGame: $it")
+        }
     }
 
     suspend fun updateGame(gameEntity: GameEntity) {
