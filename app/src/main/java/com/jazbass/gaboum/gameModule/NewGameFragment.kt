@@ -11,6 +11,7 @@ import com.jazbass.gaboum.R
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.databinding.FragmentNewGameBinding
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
+import kotlinx.coroutines.delay
 
 class NewGameFragment : Fragment() {
 
@@ -47,14 +48,12 @@ class NewGameFragment : Fragment() {
             scorePlayer1 = 0
             scorePlayer2 = 0
         }.also {
-            saveGame(it)
-            launchGameFragment()
+            launchGameFragment(it)
         }
     }
 
-    private fun launchGameFragment(gameEntity: GameEntity = GameEntity()){
-
-
+    private fun launchGameFragment(gameEntity: GameEntity){
+        gameViewModel.setGameSelected(gameEntity.id)
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
@@ -73,11 +72,5 @@ class NewGameFragment : Fragment() {
         }
     }
 
-    private fun saveGame(gameEntity: GameEntity) {
-        try{
-            gameViewModel.saveGame(gameEntity)
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-    }
+
 }

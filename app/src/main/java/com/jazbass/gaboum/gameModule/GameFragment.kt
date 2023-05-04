@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.jazbass.gaboum.common.entities.GameEntity
@@ -19,7 +18,7 @@ class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
     private lateinit var gameViewModel: GameViewModel
     private lateinit var gameEntity: GameEntity
-    private var isEditMode = false
+    private var isNewGame = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +46,12 @@ class GameFragment : Fragment() {
 
     private fun setUpViewModel() {
         gameViewModel.getGameSelected().observe(viewLifecycleOwner){
-            gameEntity = it ?: GameEntity()
             if (it != null){
-                isEditMode = true
+                isNewGame = false
                 setUIGame(it)
+                Log.i("notnull", "1")
             }else{
-                isEditMode = false
+                isNewGame = true
             }
         }
     }

@@ -15,10 +15,8 @@ class GameIterator {
         return GameApplication.database.gameDao().getAllGames()
     }
 
-    suspend fun saveGame(gameEntity: GameEntity) {
-        GameApplication.database.gameDao().addGame(gameEntity).also {
-            Log.i("NewGame", "saveGame: $it")
-        }
+    suspend fun saveGame(gameEntity: GameEntity): Long {
+        return GameApplication.database.gameDao().addGame(gameEntity)
     }
 
     suspend fun updateGame(gameEntity: GameEntity) {

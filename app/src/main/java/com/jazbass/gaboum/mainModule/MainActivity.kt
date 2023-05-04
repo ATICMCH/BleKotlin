@@ -5,6 +5,7 @@ import android.util.Log
 import com.jazbass.gaboum.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.jazbass.gaboum.gameModule.GameFragment
 import com.jazbass.gaboum.common.entities.GameEntity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,6 +17,8 @@ import com.jazbass.gaboum.mainModule.adapter.OnClickListener
 import com.jazbass.gaboum.mainModule.adapter.GamesListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jazbass.gaboum.gameModule.NewGameFragment
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -55,7 +58,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     private fun setUpViewModel(){
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mainViewModel.getGames().observe(this){ games ->
-            Log.i("Games", "${games.size}")
             mAdapter.submitList(games)
         }
 
@@ -108,6 +110,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun confirmDelete(gameEntity: GameEntity){
-
+        mainViewModel.deleteGame(gameEntity)
     }
+
 }
