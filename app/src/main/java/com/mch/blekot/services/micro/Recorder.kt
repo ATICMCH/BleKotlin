@@ -1,4 +1,4 @@
-package com.mch.blekot.services
+package com.mch.blekot.services.micro
 
 import android.content.Context
 import java.io.File
@@ -13,6 +13,7 @@ import java.io.BufferedInputStream
 import com.mch.blekot.common.Constants
 import com.mch.blekot.common.JsonManager
 import com.mch.blekot.common.getTime
+import com.mch.blekot.model.socket.SocketSingleton
 
 const val TAG = "RECORDER"
 
@@ -21,23 +22,8 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
     private var localPath = ""
     private var isRecording = false
 
-//    fun startRecord() {
-//        with(recorder) {
-//            setOutputFile(localPath)
-//            try {
-//                prepare()
-//                start()
-//            } catch (e: Error) {
-//                e.printStackTrace()
-//                isRecording = false
-//                return
-//            }
-//            isRecording = true
-//        }
-//    }
     private val destPath: String =
         mContext.applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
-
 
     fun startRecorder() {
         localPath = destPath
@@ -92,9 +78,6 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
         try {
             player!!.setDataSource(audioUri)
             player!!.prepare()
-            player!!.setOnCompletionListener {
-
-            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -111,20 +94,24 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
         //mediaPlayListener?.onStopMedia()
     }
 
-
-    fun sendAudio(path: String) {
-        val file = File(localPath)
-
-        val socket = Socket()
-        val out = socket.getOutputStream()
-        val dataOut = DataOutputStream(out)
-        dataOut.writeUTF("")
-
-        val fis = FileInputStream(file)
-        val bis = BufferedInputStream(fis)
-        val mByteArray = ByteArray(file.length().toInt())
-        bis.read(mByteArray, 0, mByteArray.size)
-        out.write(mByteArray, 0, mByteArray.size)
-        out.close()
+    private fun sendAudio(file: File){
+        SocketSingleton.socketInstance.socket.emit()
     }
+
+
+//    fun sendAudio(path: String) {
+//        val file = File(localPath)
+//
+//        val socket = Socket()
+//        val out = socket.getOutputStream()
+//        val dataOut = DataOutputStream(out)
+//        dataOut.writeUTF("")
+//
+//        val fis = FileInputStream(file)
+//        val bis = BufferedInputStream(fis)
+//        val mByteArray = ByteArray(file.length().toInt())
+//        bis.read(mByteArray, 0, mByteArray.size)
+//        out.write(mByteArray, 0, mByteArray.size)
+//        out.close()
+//    }
 }

@@ -1,4 +1,4 @@
-package com.mch.blekot.services
+package com.mch.blekot.services.micro
 
 import java.util.*
 import android.util.Log
@@ -37,9 +37,9 @@ object MicroService {
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
                 setOutputFile("/dev/null")
-            }.also {
+            }.also { recorder ->
                 try {
-                    it.prepare()
+                    recorder.prepare()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -70,19 +70,21 @@ object MicroService {
     /*----------------------------function for take ambient decibels----------------------------*/
     private fun convertDb(amplitude: Double): Double {
         /*
-         *Los teléfonos celulares pueden alcanzar hasta 90 db + -
+         *Los móviles pueden alcanzar hasta 90 db + -
          *getMaxAmplitude devuelve un valor entre 0 y 32767 (en la mayoría de los teléfonos). eso
-         *significa que si el db máximo es 90, la presión en el micrófono es 0.6325 Pascal. hace una
+         *significa que si el db máximo es 90, la presión en el micrófono es 0.6325 Pascal. Se hace una
          *comparación con el valor anterior de getMaxAmplitude. necesitamos dividir maxAmplitude con
-         *(32767/0.6325) 51805.5336 o si 100db entonces 46676.6381
+         *(32767/0.6325) 51805.5336 o si son 100db entonces 46676.6381
          */
 
         mEMA = EMA_FILTER * amplitude + (1.0 - EMA_FILTER) * mEMA
+
         /*
-        Asumiendo que la presión de referencia mínima es 0.000085 Pascal
-        (en la mayoría de los teléfonos) es igual a 0 db
-        return 20 * (float) Math.log10((mEMAValue / 51805.5336) / 0.000028251);
+        *Asumiendo que la presión de referencia mínima es 0.000085 Pascal
+        *(en la mayoría de los teléfonos) es igual a 0 db
+        *return 20 * (float) Math.log10((mEMAValue / 51805.5336) / 0.000028251);
         */
+
         return (20 * log10(mEMA / 51805.5336 / 0.000028251) * 100).roundToLong() / 100.0
     }
 
@@ -95,13 +97,13 @@ object MicroService {
                     noiseExceeded()
                 }
             }
-            Log.i("dec", "push${decibelsHistory.push(decibels)}");
+            Log.i(TAG, "push: ${decibelsHistory.push(decibels)}");
         }
     }
 
     private fun noiseExceeded() {
         //Ewelink.turnOffLight() //todo: consultar si la luz de encuentra apagada. EN TCP
-        Log.i("dec", "turnOffLight: Aqui se apago la luz de sus ojos")
+        Log.i(TAG, "turnOffLight")
         decibelsHistory.clear();
         continueMeasure = false
 

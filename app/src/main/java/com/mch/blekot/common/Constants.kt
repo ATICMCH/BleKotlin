@@ -4,14 +4,16 @@ object Constants {
 
     /*********************Pruebas**********************/
 
-    const val ID = "RS2"
+    const val ID = "PRUEBA100"
 
+    //Server producción
+    //const val URL_TCP: String = "https://tcpmch.fly.dev"
 
     //Server de pruebas
-    const val URL_TCP: String = "https://tcpmch.fly.dev"
+    //const val URL_TCP: String = "https://tcpmch2022.fly.dev"
 
     //Localhost Javier :)
-    //const val URL_TCP = "http://192.168.0.76:3002/"
+    const val URL_TCP = "http://192.168.0.78:3002/"
 
     const val PATH_OPEN_PORTAL = "portal/open"
 
