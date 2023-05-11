@@ -17,6 +17,8 @@ const val INTERVAL_GET_DECIBEL = 3000L
 @SuppressLint("StaticFieldLeak")
 object MicroService {
 
+    //TODO: Solo si el socket esta conectado
+
     private var mEMA = 0.0
     private var decibels = 0.0
     private var continueMeasure = true
@@ -102,7 +104,6 @@ object MicroService {
     }
 
     private fun noiseExceeded() {
-        //Ewelink.turnOffLight() //todo: consultar si la luz de encuentra apagada. EN TCP
         Log.i(TAG, "turnOffLight")
         decibelsHistory.clear();
         continueMeasure = false

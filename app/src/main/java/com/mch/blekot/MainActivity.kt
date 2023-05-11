@@ -19,14 +19,14 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.mch.blekot.databinding.ActivityMainBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
-import com.mch.blekot.services.MicroService
+import com.mch.blekot.services.micro.MicroService
+
+private const val ACTION_RUN_SERVICE = "com.mch.blekot.services.action.RUN_SERVICE"
+private const val ACTION_MEMORY_EXIT = "com.mch.blekot.services.action.MEMORY_EXIT"
 
 class MainActivity : AppCompatActivity() {
 
-    private val ACTION_RUN_SERVICE = "com.mch.blekot.services.action.RUN_SERVICE"
-    private val ACTION_MEMORY_EXIT = "com.mch.blekot.services.action.MEMORY_EXIT"
-
-    private lateinit var mBinding: ActivityMainBinding
+     private lateinit var mBinding: ActivityMainBinding
     private val fragment = InfoFragment()
 
     override

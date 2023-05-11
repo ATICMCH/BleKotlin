@@ -14,6 +14,7 @@ import com.mch.blekot.common.Constants
 import com.mch.blekot.common.JsonManager
 import com.mch.blekot.common.getTime
 import com.mch.blekot.model.socket.SocketSingleton
+import org.json.JSONObject
 
 const val TAG = "RECORDER"
 
@@ -22,42 +23,45 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
     private var localPath = ""
     private var isRecording = false
 
+    //Tomamos el path del almacenamiento de Android.
     private val destPath: String =
         mContext.applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
 
     fun startRecorder() {
         localPath = destPath
         localPath += "/${Constants.ID}_${getTime()}.m4a"
-        //localPath += "prueba1.m4a"
+
         Log.i(TAG, localPath)
-        recorder = MediaRecorder()
-        try {
-            with(recorder!!) {
+        recorder = MediaRecorder().apply {
+            try {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
                 setOutputFile(localPath)
                 prepare()
                 start()
+                Log.i(TAG, "Start Recorder")
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            Log.i(TAG, "Start Recorder")
-        } catch (e: Exception) {
-            Log.e(TAG, "SecurityException: " + Log.getStackTraceString(e))
         }
-        Thread.sleep(30000)
+
+        Thread.sleep(10000)
         stopRecording()
     }
 
     private fun stopRecording() {
         try {
-            Thread.sleep(150)
             recorder?.stop()
             recorder?.release()
             isRecording = false
 
             Log.i(TAG, "path: $localPath")
 
-            injectMedia(localPath)
+            sendAudio(File(localPath))
+
+            //Para reproducir el audio
+            //injectMedia(localPath)
             Log.i(TAG, "Stop Recorder")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -81,7 +85,7 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        startPlaying()
+        //startPlaying()
     }
 
     private fun startPlaying() {
@@ -94,8 +98,15 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
         //mediaPlayListener?.onStopMedia()
     }
 
-    private fun sendAudio(file: File){
-        SocketSingleton.socketInstance.socket.emit()
+    private fun sendAudio(file: File) {
+        Log.i(TAG, "sendAudio")
+
+        JSONObject().apply {
+            put("name", file.name)
+            put("file", file.readBytes())
+        }.also {
+            SocketSingleton.socketInstance?.socket?.emit("file", it)
+        }
     }
 
 
