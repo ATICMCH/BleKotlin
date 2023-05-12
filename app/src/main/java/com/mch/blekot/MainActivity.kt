@@ -19,14 +19,16 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.mch.blekot.databinding.ActivityMainBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import com.mch.blekot.model.socket.SocketSingleton
 import com.mch.blekot.services.micro.MicroService
 
 private const val ACTION_RUN_SERVICE = "com.mch.blekot.services.action.RUN_SERVICE"
 private const val ACTION_MEMORY_EXIT = "com.mch.blekot.services.action.MEMORY_EXIT"
+private const val CODE_REQUEST_PERMISSIONS = 1
 
 class MainActivity : AppCompatActivity() {
 
-     private lateinit var mBinding: ActivityMainBinding
+    private lateinit var mBinding: ActivityMainBinding
     private val fragment = InfoFragment()
 
     override
@@ -48,14 +50,20 @@ class MainActivity : AppCompatActivity() {
         mBinding.btnLaunchScan.setOnClickListener {
             MainScope().launch { Interactor.openLock() }
         }
-
-        launchMicro()
+        launchSocketService()
     }
 
-    private fun launchMicro(){
-        MicroService.setContext(this)
-        MicroService.setUpRecorder()
-        MicroService.launchDecibelsMeasure()
+    private fun launchMicro(isFirsTime: Boolean = false) {
+        if (SocketSingleton.socketInstance!!.isConnected) {
+            with(MicroService) {
+                setContext(this@MainActivity)
+                setUpRecorder()
+                launchDecibelsMeasure()
+            }
+        } else if (isFirsTime) {
+            Thread.sleep(5000)
+            launchMicro(true)
+        }
     }
 
     private fun launchInfoFragment() {
@@ -75,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
-        with(mBinding){
+        with(mBinding) {
             cancelFab.visibility = View.GONE
             fab.visibility = View.VISIBLE
         }
@@ -100,7 +108,6 @@ class MainActivity : AppCompatActivity() {
                 WRITE_EXTERNAL_STORAGE
             )
         ) {
-            val CODE_REQUEST_PERMISSIONS = 1
             EasyPermissions.requestPermissions(
                 host = this,
                 rationale = getString(R.string.ACCEPT_PERMISSIONS),
@@ -108,13 +115,6 @@ class MainActivity : AppCompatActivity() {
                 perms = arrayOf(ACCESS_FINE_LOCATION, RECORD_AUDIO, WRITE_EXTERNAL_STORAGE)
             )
         }
-    }
-
-
-
-    private fun launchMicroService(){
-        val intent = Intent(applicationContext, MicroService::class.java)
-        startService(intent)
     }
 
     private fun launchSocketService() {
@@ -130,8 +130,8 @@ class MainActivity : AppCompatActivity() {
         // Iniciar el servicio
         val intent = Intent(applicationContext, SocketService::class.java)
         startService(intent)
+        launchMicro()
     }
-
 
     /*---------------------write char---------------------*/
 
@@ -143,7 +143,6 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent) {
             when (intent.action) {
                 ACTION_RUN_SERVICE -> {
-
                     Log.d("TAG", "Servicio iniciado escucha desde MainActivity...")
                     Log.d("TAG", "Main-MSG: " + intent.getStringExtra(Constants.EXTRA_MSG))
                     Log.d("TAG", "Main-Counter: " + intent.getStringExtra(Constants.EXTRA_COUNTER))
