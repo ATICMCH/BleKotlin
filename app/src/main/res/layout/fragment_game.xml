@@ -8,64 +8,24 @@
     tools:context=".gameModule.GameFragment"
     android:padding="8dp">
 
-
-    <TextView
-        android:id="@+id/txt_player1"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        tools:text="Claire"
-        android:textSize="25sp"
-        android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/txt_player2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/txtScorePlayer1"/>
-
-    <TextView
-        android:id="@+id/txt_player2"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        tools:text="Javier"
-        android:textSize="25sp"
-        android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@id/txt_player1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/txtScorePlayer2"
-        />
-
-    <TextView
-        android:id="@+id/txtScorePlayer1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView_hist"
-        app:layout_constraintEnd_toStartOf="@id/txtScorePlayer2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_player1"
-        tools:text="50" />
-
-    <TextView
-        android:id="@+id/txtScorePlayer2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView_hist"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtScorePlayer1"
-        app:layout_constraintTop_toBottomOf="@+id/txt_player2"
-        tools:text="45" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_hist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:flow_maxElementsWrap="5"
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:listitem="@layout/entity_item"
+        tools:itemCount="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:itemCount="5"
-        tools:listitem="@layout/item_hist" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_margin="@dimen/common_padding_min"
+        android:backgroundTint="@color/principal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

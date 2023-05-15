@@ -1,17 +1,15 @@
 package com.jazbass.gaboum.gameModule
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import com.jazbass.gaboum.GameApplication
 import com.jazbass.gaboum.R
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.databinding.FragmentNewGameBinding
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
-import kotlinx.coroutines.delay
 
 class NewGameFragment : Fragment() {
 
@@ -71,6 +69,4 @@ class NewGameFragment : Fragment() {
             commit()
         }
     }
-
-
 }

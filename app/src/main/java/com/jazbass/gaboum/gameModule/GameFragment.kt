@@ -1,24 +1,22 @@
 package com.jazbass.gaboum.gameModule
 
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
+import android.os.Bundle
 import android.view.ViewGroup
-import androidx.fragment.app.setFragmentResultListener
+import android.view.LayoutInflater
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.jazbass.gaboum.common.entities.GameEntity
+import androidx.fragment.app.setFragmentResultListener
 import com.jazbass.gaboum.databinding.FragmentGameBinding
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 
-
 class GameFragment : Fragment() {
 
-    private lateinit var binding: FragmentGameBinding
-    private lateinit var gameViewModel: GameViewModel
-    private lateinit var gameEntity: GameEntity
     private var isNewGame = false
+    private lateinit var gameViewModel: GameViewModel
+    private lateinit var binding: FragmentGameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +27,16 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGameBinding.inflate(inflater, container, false)
-        setFragmentResultListener("players"){ _, bundle ->
-            binding.txtPlayer1.text = bundle.getString("player1")
-            binding.txtPlayer2.text = bundle.getString("player2")
+        binding = FragmentGameBinding.inflate(inflater, container, false).apply {
+            txtScorePlayer1.text = "0"
+            txtScorePlayer2.text = "0"
+            setFragmentResultListener("players"){ _, bundle ->
+                txtPlayer1.text = bundle.getString("player1")
+                txtPlayer2.text = bundle.getString("player2")
+            }
+            btnNewRow.setOnClickListener{}
         }
-        binding.txtScorePlayer1.text = "0"
-        binding.txtScorePlayer2.text = "0"
+
         return binding.root
     }
 
@@ -64,6 +65,4 @@ class GameFragment : Fragment() {
              txtScorePlayer2.text = gameEntity.scorePlayer2.toString().trim()
          }
     }
-
-
 }
