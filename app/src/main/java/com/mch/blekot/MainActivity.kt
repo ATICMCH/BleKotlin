@@ -38,8 +38,6 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        //launchSocketService()
-
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         methodRequiresTwoPermission()
@@ -50,20 +48,8 @@ class MainActivity : AppCompatActivity() {
         mBinding.btnLaunchScan.setOnClickListener {
             MainScope().launch { Interactor.openLock() }
         }
-        launchSocketService()
-    }
 
-    private fun launchMicro(isFirsTime: Boolean = false) {
-        if (SocketSingleton.socketInstance!!.isConnected) {
-            with(MicroService) {
-                setContext(this@MainActivity)
-                setUpRecorder()
-                launchDecibelsMeasure()
-            }
-        } else if (isFirsTime) {
-            Thread.sleep(5000)
-            launchMicro(true)
-        }
+        launchSocketService()
     }
 
     private fun launchInfoFragment() {
@@ -86,6 +72,33 @@ class MainActivity : AppCompatActivity() {
         with(mBinding) {
             cancelFab.visibility = View.GONE
             fab.visibility = View.VISIBLE
+        }
+    }
+
+    private fun launchSocketService() {
+        val filter = IntentFilter(ACTION_RUN_SERVICE)
+        filter.addAction(ACTION_MEMORY_EXIT)
+        val receiver = ResponseReceiver()
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
+
+        val intent = Intent(applicationContext, SocketService::class.java)
+        startService(intent)
+
+        if(EasyPermissions.hasPermissions(this,RECORD_AUDIO)){
+            launchMicro()
+        }
+    }
+
+     fun launchMicro(isFirsTime: Boolean = false) {
+        if (SocketSingleton.socketInstance!!.isConnected) {
+            with(MicroService) {
+                setContext(this@MainActivity)
+                setUpRecorder()
+                launchDecibelsMeasure()
+            }
+        } else if (isFirsTime) {
+            Thread.sleep(5000)
+            launchMicro(true)
         }
     }
 
@@ -115,22 +128,6 @@ class MainActivity : AppCompatActivity() {
                 perms = arrayOf(ACCESS_FINE_LOCATION, RECORD_AUDIO, WRITE_EXTERNAL_STORAGE)
             )
         }
-    }
-
-    private fun launchSocketService() {
-        val filter = IntentFilter(ACTION_RUN_SERVICE)
-        filter.addAction(ACTION_MEMORY_EXIT)
-
-        // Crear un nuevo ResponseReceiver
-        val receiver = ResponseReceiver()
-
-        // Registrar el receiver y su filtro
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter)
-
-        // Iniciar el servicio
-        val intent = Intent(applicationContext, SocketService::class.java)
-        startService(intent)
-        launchMicro()
     }
 
     /*---------------------write char---------------------*/

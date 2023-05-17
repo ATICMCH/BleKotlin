@@ -18,10 +18,11 @@ import org.json.JSONObject
 
 const val TAG = "RECORDER"
 
-class Recorder(private var recorder: MediaRecorder?, private val mContext: Context) {
+class Recorder( mContext: Context) {
 
     private var localPath = ""
     private var isRecording = false
+    private lateinit var recorder: MediaRecorder
 
     //Tomamos el path del almacenamiento de Android.
     private val destPath: String =
@@ -52,8 +53,8 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
 
     private fun stopRecording() {
         try {
-            recorder?.stop()
-            recorder?.release()
+            recorder.stop()
+            recorder.release()
             isRecording = false
 
             Log.i(TAG, "path: $localPath")
@@ -107,6 +108,7 @@ class Recorder(private var recorder: MediaRecorder?, private val mContext: Conte
         }.also {
             SocketSingleton.socketInstance?.socket?.emit("file", it)
         }
+
     }
 
 

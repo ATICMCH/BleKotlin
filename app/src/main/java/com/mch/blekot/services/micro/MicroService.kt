@@ -101,7 +101,7 @@ object MicroService {
             e.printStackTrace()
         }
 
-        Recorder(mRecorder, mContext).run {
+        Recorder(mContext).run {
             startRecorder()
         }
     }
