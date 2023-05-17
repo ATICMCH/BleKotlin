@@ -55,12 +55,7 @@ class NewGameFragment : Fragment() {
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
-        Bundle().apply {
-            putString("player1", binding.etPlayer1.text.toString().trim())
-            putString("player2", binding.etPlayer2.text.toString().trim())
-        }.also {
-            fragmentManager.setFragmentResult("players", it)
-        }
+
         val transaction = fragmentManager.beginTransaction()
 
         with(transaction){

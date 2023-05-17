@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.databinding.ItemGameBinding
 
-class GamesListAdapter( private var listener: OnClickListener) :
+class GamesListAdapter(private var listener: OnClickListener) :
     ListAdapter<GameEntity, RecyclerView.ViewHolder>(GameDiffCallback()) {
 
     private lateinit var mContext: Context
@@ -25,9 +25,9 @@ class GamesListAdapter( private var listener: OnClickListener) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val game = getItem(position)
 
-        with(holder as ViewHolder){
+        with(holder as ViewHolder) {
             setListener(game)
-            with(binding){
+            with(binding) {
                 player1.text = game.player1
                 player2.text = game.player2
                 scorePlayer1.text = game.scorePlayer1.toString().trim()
@@ -36,13 +36,13 @@ class GamesListAdapter( private var listener: OnClickListener) :
         }
     }
 
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemGameBinding.bind(view)
 
-        fun setListener(gameEntity: GameEntity){
-            with(binding.root){
+        fun setListener(gameEntity: GameEntity) {
+            with(binding.root) {
                 setOnClickListener { listener.onClick(gameEntity) }
-                setOnLongClickListener{
+                setOnLongClickListener {
                     listener.onDeleteGame(gameEntity)
                     true
                 }

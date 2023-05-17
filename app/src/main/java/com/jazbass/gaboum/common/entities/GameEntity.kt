@@ -7,9 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "GameEntity", indices = [Index(value = ["player1"], unique = false)])
 data class GameEntity(@PrimaryKey(autoGenerate = true)
         var id: Long = 0,
-        var player1: String,
-        var player2: String,
-        var scorePlayer1: Int,
-        var scorePlayer2: Int ) {
-    constructor() : this(player1 = "", player2 = "", scorePlayer1 = 0, scorePlayer2 = 0)
+        var gameId: Long) {
+    constructor() : this(gameId = 0)
 }
