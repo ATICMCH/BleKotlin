@@ -1,4 +1,4 @@
-package com.jazbass.gaboum.gameModule
+package com.jazbass.gaboum.gameModule.view
 
 import android.os.Bundle
 import android.view.View
@@ -31,7 +31,7 @@ class NewGameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnCreateGame.setOnClickListener { startGame() }
+        binding.btnCreateGame.setOnClickListener { launchGameFragment() }
         setUpViewModel()
     }
 
@@ -39,18 +39,8 @@ class NewGameFragment : Fragment() {
 
     }
 
-    private fun startGame() {
-        GameEntity().apply {
-            player1 = binding.etPlayer1.text.toString().trim()
-            player2 = binding.etPlayer2.text.toString().trim()
-            scorePlayer1 = 0
-            scorePlayer2 = 0
-        }.also {
-            launchGameFragment(it)
-        }
-    }
 
-    private fun launchGameFragment(gameEntity: GameEntity){
+    private fun launchGameFragment(gameEntity: GameEntity = GameEntity()){
         gameViewModel.setGameSelected(gameEntity.id)
 
         val fragment = GameFragment()

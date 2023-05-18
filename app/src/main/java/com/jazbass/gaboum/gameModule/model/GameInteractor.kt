@@ -1,11 +1,11 @@
 package com.jazbass.gaboum.gameModule.model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.jazbass.gaboum.GameApplication
 import com.jazbass.gaboum.common.entities.GameEntity
+import com.jazbass.gaboum.common.entities.PlayerEntity
 
-class GameIterator {
+class GameInteractor {
 
     fun getGameById(id: Long): LiveData<GameEntity> {
         return GameApplication.database.gameDao().getGameById(id)
@@ -21,6 +21,10 @@ class GameIterator {
 
     suspend fun updateGame(gameEntity: GameEntity) {
         GameApplication.database.gameDao().updateGame(gameEntity)
+    }
+
+    fun getPlayersByGame(gameId: Long): List<PlayerEntity>{
+        return GameApplication.database.playerDao().getUserByGameId(gameId)
     }
 
 }

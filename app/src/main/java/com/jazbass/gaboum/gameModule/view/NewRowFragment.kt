@@ -1,4 +1,4 @@
-package com.jazbass.gaboum.gameModule
+package com.jazbass.gaboum.gameModule.view
 
 import android.os.Bundle
 import android.view.View

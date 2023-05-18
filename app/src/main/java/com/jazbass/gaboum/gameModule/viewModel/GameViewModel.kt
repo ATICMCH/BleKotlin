@@ -9,13 +9,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.common.utils.Constants
-import com.jazbass.gaboum.gameModule.model.GameIterator
+import com.jazbass.gaboum.gameModule.model.GameInteractor
 
 class GameViewModel : ViewModel() {
 
     private val result = MutableLiveData<Any>()
     private val gameSelected = MutableLiveData<Long>()
-    private val interactor: GameIterator = GameIterator()
+    private val interactor: GameInteractor = GameInteractor()
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun setGameSelected(id: Long){

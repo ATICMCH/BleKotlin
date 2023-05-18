@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cdcdcdca"
-    tools:context=".gameModule.NewGameFragment">
+    tools:context=".gameModule.view.NewGameFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_player1"
+                android:hint="@string/prompt_player2"
                 app:counterEnabled="true"
                 app:counterMaxLength="@integer/counter_max_name"
                 app:endIconMode="clear_text"
@@ -61,6 +61,17 @@
                     android:inputType="textCapWords"
                     android:maxLength="@integer/counter_max_name" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addPlayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/principal"
+                android:text="+"
+                android:textSize="20sp"
+                style="?android:attr/borderlessButtonStyle"/>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCreateGame"
