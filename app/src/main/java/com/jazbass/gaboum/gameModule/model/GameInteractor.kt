@@ -2,6 +2,7 @@ package com.jazbass.gaboum.gameModule.model
 
 import androidx.lifecycle.LiveData
 import com.jazbass.gaboum.GameApplication
+import com.jazbass.gaboum.common.database.GameWithPlayers
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.common.entities.PlayerEntity
 
@@ -23,8 +24,5 @@ class GameInteractor {
         GameApplication.database.gameDao().updateGame(gameEntity)
     }
 
-    fun getPlayersByGame(gameId: Long): List<PlayerEntity>{
-        return GameApplication.database.playerDao().getUserByGameId(gameId)
-    }
 
 }

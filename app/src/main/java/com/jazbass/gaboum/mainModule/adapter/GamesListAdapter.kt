@@ -28,10 +28,7 @@ class GamesListAdapter(private var listener: OnClickListener) :
         with(holder as ViewHolder) {
             setListener(game)
             with(binding) {
-                player1.text = game.player1
-                player2.text = game.player2
-                scorePlayer1.text = game.scorePlayer1.toString().trim()
-                scorePlayer2.text = game.scorePlayer2.toString().trim()
+
             }
         }
     }

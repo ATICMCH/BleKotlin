@@ -6,11 +6,10 @@ import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.common.entities.PlayerEntity
 
 data class GameWithPlayers(
-    @Embedded
-    val gameEntity: GameEntity,
+    @Embedded val gameEntity: GameEntity,
     @Relation(
         parentColumn = "id",
-        entityColumn = "gameId"
+        entityColumn = "game_id"
     )
     val players: List<PlayerEntity>
 )

@@ -12,14 +12,11 @@ interface PlayerDao {
     @Insert
     fun insert(playerEntity: PlayerEntity)
 
-    @Query("SELECT * FROM player")
-    fun getAllUsers(gameId: Long): List<PlayerEntity>
+    @Query("SELECT * FROM PlayerEntity")
+    fun getAllUsers(): List<PlayerEntity>
 
-    @Query("SELECT * FROM player WHERE gameId = :gameId")
+    @Query("SELECT * FROM PlayerEntity WHERE game_id = :gameId")
     fun getUserByGameId(gameId: Long): List<PlayerEntity>
 
-    @Transaction
-    @Query("SELECT * FROM player")
-    fun getGamePlayers(gameId: Long): List<GameWithPlayers>
 
 }

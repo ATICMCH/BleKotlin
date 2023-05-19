@@ -39,16 +39,20 @@ class NewGameFragment : Fragment() {
 
     }
 
-
-    private fun launchGameFragment(gameEntity: GameEntity = GameEntity()){
+    private fun launchGameFragment(gameEntity: GameEntity = GameEntity()) {
         gameViewModel.setGameSelected(gameEntity.id)
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
 
+        Bundle().apply {
+            putStringArrayList("player", arrayListOf("Claire", "Javier"))
+        }.also {
+            fragmentManager.setFragmentResult("players", it)
+        }
         val transaction = fragmentManager.beginTransaction()
 
-        with(transaction){
+        with(transaction) {
             replace(R.id.containerMain, fragment)
             addToBackStack(null)
             commit()

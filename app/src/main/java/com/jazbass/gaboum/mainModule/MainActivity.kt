@@ -4,17 +4,17 @@ import android.os.Bundle
 import com.jazbass.gaboum.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AppCompatActivity
-import com.jazbass.gaboum.gameModule.view.GameFragment
 import com.jazbass.gaboum.common.entities.GameEntity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.jazbass.gaboum.gameModule.view.GameFragment
 import com.jazbass.gaboum.mainModule.model.MainInteractor
+import com.jazbass.gaboum.gameModule.view.NewGameFragment
 import com.jazbass.gaboum.databinding.ActivityMainBinding
 import com.jazbass.gaboum.mainModule.viewModel.MainViewModel
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.jazbass.gaboum.mainModule.adapter.OnClickListener
 import com.jazbass.gaboum.mainModule.adapter.GamesListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jazbass.gaboum.gameModule.view.NewGameFragment
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "GameEntity", indices = [Index(value = ["player1"], unique = false)])
+@Entity(tableName = "GameEntity")
 data class GameEntity(@PrimaryKey(autoGenerate = true)
         var id: Long = 0,
         var gameId: Long) {

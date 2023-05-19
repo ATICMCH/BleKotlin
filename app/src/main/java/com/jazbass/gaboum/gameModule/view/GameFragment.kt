@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.GameEntity
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.databinding.FragmentGameBinding
+import com.jazbass.gaboum.gameModule.model.GameInteractor
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.jazbass.gaboum.gameModule.adapter.CurrentGameLisAdapter
-import com.jazbass.gaboum.gameModule.model.GameInteractor
+import java.util.ArrayList
 
 class GameFragment : Fragment() {
 
@@ -38,7 +41,11 @@ class GameFragment : Fragment() {
         binding = FragmentGameBinding.inflate(inflater, container, false).apply {
             fab.setOnClickListener { saveRow() }
         }
-        setUpRecyclerView()
+        setFragmentResultListener("players") { _, bundle ->
+            val players = bundle.getStringArrayList("List")
+            setUpRecyclerView()
+            setUpGame(players)
+        }
         return binding.root
     }
 
@@ -50,6 +57,15 @@ class GameFragment : Fragment() {
             layoutManager = mLayout
             adapter = mAdapter
         }
+    }
+
+
+    private fun setUpGame(players: ArrayList<String>?) {
+        val playerList: MutableList<PlayerEntity> = mutableListOf()
+        for(player in players!!){
+            playerList.add(PlayerEntity(gameId = 0L, score = 0, name = player))
+        }
+        mAdapter.submitList(playerList)
     }
 
     private fun saveRow() {
@@ -66,7 +82,6 @@ class GameFragment : Fragment() {
             if (it != null) {
                 isNewGame = false
                 setUIGame(it)
-                Log.i("notnull", "1")
             } else {
                 isNewGame = true
             }
@@ -74,7 +89,6 @@ class GameFragment : Fragment() {
     }
 
     private fun setUIGame(gameEntity: GameEntity) {
-        val players = gameInteractor.getPlayersByGame(gameEntity.id)
-        mAdapter.submitList(players)
+
     }
 }
