@@ -27,9 +27,6 @@ class GamesListAdapter(private var listener: OnClickListener) :
 
         with(holder as ViewHolder) {
             setListener(game)
-            with(binding) {
-
-            }
         }
     }
 

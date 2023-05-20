@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.databinding.EntityItemBinding
 
-class CurrentGameLisAdapter() :
+class NewRowAdapter() :
     ListAdapter<PlayerEntity, RecyclerView.ViewHolder>(CurrentGameDiffCallback()) {
 
     private lateinit var mContext: Context
@@ -35,10 +35,19 @@ class CurrentGameLisAdapter() :
 
         fun setListener(player: PlayerEntity) {
             with(binding) {
-                binding.btnDecrease.visibility = View.INVISIBLE
-                binding.btnIncrease.visibility = View.INVISIBLE
                 scorePlayer.text = player.score.toString().trim()
                 this.player.text = player.name
+
+                btnIncrease.setOnClickListener {
+                    var score = scorePlayer.text.toString().toInt()
+                    score ++
+                    binding.scorePlayer.text = score.toString()
+                }
+                btnDecrease.setOnClickListener {
+                    var score = scorePlayer.text.toString().toInt()
+                    score --
+                    binding.scorePlayer.text = score.toString()
+                }
             }
         }
     }

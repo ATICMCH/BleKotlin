@@ -1,6 +1,7 @@
 package com.jazbass.gaboum.mainModule
 
 import android.os.Bundle
+import android.view.View
 import com.jazbass.gaboum.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(mBinding.root)
 
         mBinding.btnFab.setOnClickListener {
+            mBinding.btnFab.visibility = View.GONE
             launchNewGameFragment()
         }
 
@@ -83,12 +85,12 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         val fragment = GameFragment()
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-
         with(transaction){
             add(R.id.containerMain, fragment)
             addToBackStack(null)
             commit()
         }
+
     }
 
     override fun onDeleteGame(gameEntity: GameEntity) {

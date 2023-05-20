@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/customTIL"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:counterEnabled="true"
+    app:counterMaxLength="@integer/counter_max_name"
+    app:endIconMode="clear_text"
+    app:startIconDrawable="@drawable/ic_player"
+    style="@style/CustomOutlinedBox">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPlayer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords"
+        android:maxLength="@integer/counter_max_name" />
+</com.google.android.material.textfield.TextInputLayout>
+
+<!--TODO: DataBinding and counter bug-->

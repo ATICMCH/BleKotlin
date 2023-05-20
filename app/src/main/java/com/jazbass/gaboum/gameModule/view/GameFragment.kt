@@ -11,12 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.GameEntity
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jazbass.gaboum.R
 import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.databinding.FragmentGameBinding
 import com.jazbass.gaboum.gameModule.model.GameInteractor
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.jazbass.gaboum.gameModule.adapter.CurrentGameLisAdapter
 import java.util.ArrayList
+
+const val TAG = "GameFragment"
 
 class GameFragment : Fragment() {
 
@@ -39,14 +42,27 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentGameBinding.inflate(inflater, container, false).apply {
-            fab.setOnClickListener { saveRow() }
+            fab.setOnClickListener { launchNewRowFragment() }
         }
         setFragmentResultListener("players") { _, bundle ->
-            val players = bundle.getStringArrayList("List")
+            val players = bundle.getStringArrayList("playersList")
             setUpRecyclerView()
             setUpGame(players)
         }
         return binding.root
+    }
+
+    private fun launchNewRowFragment() {
+        val fragment = NewRowFragment()
+        val fragmentManager = parentFragmentManager
+
+        val transaction = fragmentManager.beginTransaction()
+
+        with(transaction) {
+            replace(R.id.containerMain, fragment)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     private fun setUpRecyclerView() {
@@ -64,12 +80,9 @@ class GameFragment : Fragment() {
         val playerList: MutableList<PlayerEntity> = mutableListOf()
         for(player in players!!){
             playerList.add(PlayerEntity(gameId = 0L, score = 0, name = player))
+            Log.i(TAG, player)
         }
         mAdapter.submitList(playerList)
-    }
-
-    private fun saveRow() {
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,3 +105,4 @@ class GameFragment : Fragment() {
 
     }
 }
+

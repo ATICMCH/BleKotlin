@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.jazbass.gaboum.common.entities.GameEntity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.jazbass.gaboum.gameModule.adapter.NewRowAdapter
 import com.jazbass.gaboum.databinding.FragmentNewRowBinding
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 
@@ -16,6 +19,8 @@ class NewRowFragment : Fragment() {
     private lateinit var gameViewModel: GameViewModel
     private lateinit var currentGameEntity: GameEntity
 
+    private lateinit var mAdapter: NewRowAdapter
+    private lateinit var mLayout: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,24 +32,28 @@ class NewRowFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding =  FragmentNewRowBinding.inflate(inflater, container, false)
-        //binding.btsSave
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpRecyclerView()
         setUpViewModel()
     }
 
-    private fun saveRow(){
-        currentGameEntity
+    private fun setUpRecyclerView() {
+        mAdapter = NewRowAdapter()
+        mLayout = LinearLayoutManager(this.context)
+
+        binding.recyclerView.apply {
+            layoutManager = mLayout
+            adapter = mAdapter
+        }
     }
 
+
     private fun setUpViewModel(){
-        gameViewModel.getGameSelected().observe(viewLifecycleOwner){
-            currentGameEntity = it
-            setUI(it)
-        }
+
     }
 
     private fun setUI(gameEntity: GameEntity){
