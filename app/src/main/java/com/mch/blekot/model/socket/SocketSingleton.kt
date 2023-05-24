@@ -11,6 +11,7 @@ import kotlinx.coroutines.*
 import io.socket.client.Socket
 import com.mch.blekot.common.Constants
 import android.annotation.SuppressLint
+import com.mch.blekot.MainActivity
 import com.mch.blekot.common.ValidateUtil
 import com.mch.blekot.model.Interactor
 import com.mch.blekot.services.SocketService
@@ -36,6 +37,7 @@ class SocketSingleton private constructor() {
             println("Conectado!!")
             isConnected = true
             socket.emit(Constants.ACTION_LOG, Constants.ID, Constants.MESSAGE)
+            MainActivity.getInstance()?.launchMicro()
         }
 
         socket.on(Socket.EVENT_CONNECT_ERROR) { args: Array<Any> -> println("connect_error: " + args[0]) }
@@ -186,7 +188,6 @@ class SocketSingleton private constructor() {
                                 .toString()
                         executeAction { Interactor.syncTime(newTime) }
                     }
-
                 }
             } catch (e: ValidateException) {
                 socket.emit(
@@ -246,15 +247,15 @@ class SocketSingleton private constructor() {
         private val TAG = SocketService::class.java.simpleName
 
         @SuppressLint("StaticFieldLeak")
-        private var mInstance: SocketSingleton? = null
+        private var instance: SocketSingleton? = null
 
         @get:Synchronized
         val socketInstance: SocketSingleton?
             get() {
-                if (mInstance == null) {
-                    mInstance = SocketSingleton()
+                if (instance == null) {
+                    instance = SocketSingleton()
                 }
-                return mInstance
+                return instance
             }
     }
 }

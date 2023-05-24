@@ -22,6 +22,14 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.mch.blekot.model.socket.SocketSingleton
 import com.mch.blekot.services.micro.MicroService
 
+/****
+ * Project: BleKot
+ * From: com.mch.blekot
+ * Created by: JazBass on 22/05/2023
+ * Find me in github: https://github.com/JazBass
+ * All rights reserved 2023
+ ****/
+
 private const val ACTION_RUN_SERVICE = "com.mch.blekot.services.action.RUN_SERVICE"
 private const val ACTION_MEMORY_EXIT = "com.mch.blekot.services.action.MEMORY_EXIT"
 private const val CODE_REQUEST_PERMISSIONS = 1
@@ -84,21 +92,15 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, SocketService::class.java)
         startService(intent)
 
-        if(EasyPermissions.hasPermissions(this,RECORD_AUDIO)){
-            launchMicro()
-        }
     }
 
-     fun launchMicro(isFirsTime: Boolean = false) {
+    fun launchMicro() {
         if (SocketSingleton.socketInstance!!.isConnected) {
             with(MicroService) {
-                setContext(this@MainActivity)
+                setContext(applicationContext)
                 setUpRecorder()
                 launchDecibelsMeasure()
             }
-        } else if (isFirsTime) {
-            Thread.sleep(5000)
-            launchMicro(true)
         }
     }
 
@@ -162,6 +164,8 @@ class MainActivity : AppCompatActivity() {
         fun applicationContext(): Context {
             return instance!!.applicationContext
         }
+
+        fun getInstance() = instance
     }
 
 }

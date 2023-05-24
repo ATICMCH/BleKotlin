@@ -60,7 +60,6 @@ object ValidateUtil {
                 null,
                 resUrlArduino.msg
             )
-            Log.i("VALIDATE", "EXCEPTION")
             throw(ValidateException())
         }
     }

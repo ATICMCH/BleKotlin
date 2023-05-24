@@ -1,11 +1,10 @@
 package com.mch.blekot.common
 
-import android.annotation.SuppressLint
 import android.util.Log
-import com.mch.blekot.model.Interactor
+import android.annotation.SuppressLint
 import com.mch.blekot.model.DeviceData
+import com.mch.blekot.model.Interactor
 import com.mch.blekot.model.socket.SocketSingleton
-import java.text.SimpleDateFormat
 
 import java.util.*
 
@@ -17,9 +16,6 @@ object JsonManager {
     private const val PATH_READ_RECORD = "/API/Device/UnlockRecord"
     private const val PATH_CODE = "/API/Device/DeviceSetTemporaryPassword"
 
-    private val deviceName = DeviceData.DEVICE_NAME ?: ""
-    private val deviceIdNumber = DeviceData.DEVICE_ID_NUMBER ?: ""
-
     fun getPostData(action: Int, devicePower: String, rdmNumber: String): Map<String, String> {
 
         Log.i("JsonManager", "action: $action")
@@ -30,8 +26,8 @@ object JsonManager {
 
                 val json = """{
                     appID: "WELOCK2202161033", 
-                    deviceNumber: "$deviceIdNumber", 
-                    deviceBleName: "$deviceName", 
+                    deviceNumber: "${DeviceData.DEVICE_ID_NUMBER}", 
+                    deviceBleName: "${DeviceData.DEVICE_NAME}", 
                     deviceRandomFactor: "$rdmNumber"}
                 """.trimIndent()
 
@@ -55,8 +51,8 @@ object JsonManager {
 
                 val json = """{
                     appID: "WELOCK2202161033", 
-                    deviceNumber: "$deviceIdNumber",  
-                    deviceBleName: "$deviceName", 
+                    deviceNumber: "${DeviceData.DEVICE_ID_NUMBER}",  
+                    deviceBleName: "${DeviceData.DEVICE_NAME}", 
                     deviceRandomFactor: "$rdmNumber", 
                     password: ${Interactor.getDeviceNewPassword()}, 
                     index: ${Interactor.getIndex()}, 
@@ -73,8 +69,8 @@ object JsonManager {
 
                 val json = """{
                     appID: "WELOCK2202161033",
-                    deviceNumber: "$deviceIdNumber",
-                    deviceBleName: "$deviceName",
+                    deviceNumber: "${DeviceData.DEVICE_ID_NUMBER}",
+                    deviceBleName: "${DeviceData.DEVICE_NAME}",
                     deviceRandomFactor: "$rdmNumber",
                     cardQr: "${Interactor.getQR()}",
                     type: "${Interactor.getType()}"}""".trimIndent()
@@ -85,8 +81,8 @@ object JsonManager {
             Constants.SYNC_TIME -> {
                 val json = """{
                     appID: "WELOCK2202161033",
-                    deviceNumber: "$deviceIdNumber",
-                    deviceBleName: "$deviceName",
+                    deviceNumber: "${DeviceData.DEVICE_ID_NUMBER}",
+                    deviceBleName: "${DeviceData.DEVICE_NAME}",
                     timestamp: ${Interactor.getNewTime()},
                     deviceRandomFactor: "$rdmNumber"}""".trimIndent()
 
@@ -98,8 +94,8 @@ object JsonManager {
             Constants.READ_RECORD -> {
                 val json = """{
                     appID: "WELOCK2202161033", 
-                    deviceNumber: "$deviceIdNumber", 
-                    deviceBleName: "$deviceName", 
+                    deviceNumber: "${DeviceData.DEVICE_ID_NUMBER}", 
+                    deviceBleName: "${DeviceData.DEVICE_NAME}", 
                     devicePower: "$devicePower", 
                     deviceRandomFactor: "$rdmNumber"}
                 """.trimIndent()
@@ -135,7 +131,7 @@ object JsonManager {
             else -> Constants.MSG_KO
         }
 
-        var responseJson = ""
+        val responseJson: String
 
         when (action) {
 

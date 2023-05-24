@@ -7,19 +7,18 @@ import kotlin.math.roundToLong
 import android.content.Context
 import android.media.MediaRecorder
 import android.annotation.SuppressLint
-import com.mch.blekot.model.Ewelink
-
 
 const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
+
 /*
 * DECIBEL_DATA_LENGTH es la cantidad de registros que se almacenaran en el stack que guarda los
 * db. Esto multiplicado por INTERVAL_GET_DECIBEL que es el intervalo de tiempo entre cada vez que se
 * miden los db, nos dara el tiempo total de escucha y la cantidad de registros que usaremos para
 * evaluar la media de ruido.
 */
+
 const val DECIBEL_DATA_LENGTH = 4
 const val INTERVAL_GET_DECIBEL = 3000L
-
 
 const val EMA_FILTER = 0.6
 
@@ -55,7 +54,7 @@ object MicroService {
             }
         }
     }
-
+    //TODO: Liberar los recursos del recorder
     fun launchDecibelsMeasure() {
         try {
             mRecorder?.start()

@@ -46,7 +46,6 @@ class Recorder( mContext: Context) {
                 e.printStackTrace()
             }
         }
-
         Thread.sleep(10000)
         stopRecording()
     }
@@ -69,62 +68,47 @@ class Recorder( mContext: Context) {
         }
     }
 
-    /******** Para probar si se guardo bien el audio **********/
-    private var player: MediaPlayer? = MediaPlayer()
-
-    fun resetMediaPlayer() {
-        if (player != null) {
-            player!!.release()
-            player = null
-        }
-    }
-
-    private fun injectMedia(audioUri: String?) {
-        try {
-            player!!.setDataSource(audioUri)
-            player!!.prepare()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        //startPlaying()
-    }
-
-    private fun startPlaying() {
-        if (player != null) player!!.start()
-        //mediaPlayListener?.onStartMedia()
-    }
-
-    private fun stopPlaying() {
-        if (player != null && player!!.isPlaying) player!!.pause()
-        //mediaPlayListener?.onStopMedia()
-    }
-
     private fun sendAudio(file: File) {
         Log.i(TAG, "sendAudio")
 
         JSONObject().apply {
             put("name", file.name)
             put("file", file.readBytes())
-        }.also {
-            SocketSingleton.socketInstance?.socket?.emit("file", it)
+        }.also { audioFile ->
+            SocketSingleton.socketInstance?.socket?.emit("file", Constants.ID, audioFile)
         }
+    }
+}
 
+    /**Para probar el audio solo hay que pasarle el path donde fue guardado a injectMediaz
+
+    private var player: MediaPlayer? = MediaPlayer()
+
+    private fun injectMedia(audioUri: String?) {
+    try {
+    player!!.setDataSource(audioUri)
+    player!!.prepare()
+    } catch (e: Exception) {
+    e.printStackTrace()
+    }
+    //startPlaying()
     }
 
+    private fun startPlaying() {
+    if (player != null) player!!.start()
+    //mediaPlayListener?.onStartMedia()
+    }
 
-//    fun sendAudio(path: String) {
-//        val file = File(localPath)
-//
-//        val socket = Socket()
-//        val out = socket.getOutputStream()
-//        val dataOut = DataOutputStream(out)
-//        dataOut.writeUTF("")
-//
-//        val fis = FileInputStream(file)
-//        val bis = BufferedInputStream(fis)
-//        val mByteArray = ByteArray(file.length().toInt())
-//        bis.read(mByteArray, 0, mByteArray.size)
-//        out.write(mByteArray, 0, mByteArray.size)
-//        out.close()
-//    }
-}
+    private fun stopPlaying() {
+    if (player != null && player!!.isPlaying) player!!.pause()
+    //mediaPlayListener?.onStopMedia()
+    }
+
+    fun resetMediaPlayer() {
+    if (player != null) {
+    player!!.release()
+    player = null
+    }
+    }
+
+     */
