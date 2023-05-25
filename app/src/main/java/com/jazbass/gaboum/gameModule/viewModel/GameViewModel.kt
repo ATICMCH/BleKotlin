@@ -8,24 +8,34 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jazbass.gaboum.common.entities.GameEntity
+import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.common.utils.Constants
 import com.jazbass.gaboum.gameModule.model.GameInteractor
 
 class GameViewModel : ViewModel() {
 
     private val result = MutableLiveData<Any>()
-    private val gameSelected = MutableLiveData<Long>()
+    //private val gameSelected = MutableLiveData<Long>()
     private val interactor: GameInteractor = GameInteractor()
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
+    private val gameSelected = MutableLiveData<GameEntity>()
+//    fun setGameSelected(id: Long){
+//        gameSelected.value = id
+//        Log.i("GameSelected" , id.toString())
+//    }
 
-    fun setGameSelected(id: Long){
-        gameSelected.value = id
-        Log.i("GameSelected" , id.toString())
+    fun setGameSelected(gameEntity: GameEntity){
+        gameSelected.value = gameEntity
     }
 
     fun getGameSelected(): LiveData<GameEntity>{
-        return interactor.getGameById(gameSelected.value!!)
+        //return interactor.getGameById(gameSelected.value!!)
+        return gameSelected
     }
+
+//    fun getGamePlayers(): LiveData<List<PlayerEntity>>{
+//        return interactor.getGamePlayers(gameSelected.value!!)
+//    }
 
     fun isShowProgress(): LiveData<Boolean>{
         return showProgress

@@ -1,5 +1,6 @@
 package com.jazbass.gaboum.common.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -16,7 +17,7 @@ interface PlayerDao {
     fun getAllUsers(): List<PlayerEntity>
 
     @Query("SELECT * FROM PlayerEntity WHERE game_id = :gameId")
-    fun getUserByGameId(gameId: Long): List<PlayerEntity>
+    fun getUserByGameId(gameId: Long): LiveData<List<PlayerEntity>>
 
 
 }

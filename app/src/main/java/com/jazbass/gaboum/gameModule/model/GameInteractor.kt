@@ -12,6 +12,10 @@ class GameInteractor {
         return GameApplication.database.gameDao().getGameById(id)
     }
 
+    fun getGamePlayers(id: Long): LiveData<List<PlayerEntity>>{
+        return GameApplication.database.playerDao().getUserByGameId(id)
+    }
+
     fun getAllGames(): LiveData<MutableList<GameEntity>> {
         return GameApplication.database.gameDao().getAllGames()
     }

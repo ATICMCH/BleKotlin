@@ -51,12 +51,9 @@ class NewRowFragment : Fragment() {
         }
     }
 
-
     private fun setUpViewModel(){
-
-    }
-
-    private fun setUI(gameEntity: GameEntity){
-
+        gameViewModel.getGamePlayers().observe(viewLifecycleOwner){ players ->
+            mAdapter.submitList(players)
+        }
     }
 }
