@@ -24,10 +24,12 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="@dimen/common_padding"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/parentLayout"
@@ -77,15 +79,15 @@
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnNewPlayer"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="+"
-            android:textColor="@color/principal"
-            android:textSize="20sp" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btnNewPlayer"-->
+<!--            style="?android:attr/borderlessButtonStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/white"-->
+<!--            android:text="+"-->
+<!--            android:textColor="@color/principal"-->
+<!--            android:textSize="20sp" />-->
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -98,4 +100,14 @@
         android:contentDescription="@string/new_game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

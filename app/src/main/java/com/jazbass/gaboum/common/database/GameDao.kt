@@ -13,11 +13,11 @@ interface GameDao {
     fun getGameById(id: Long): LiveData<GameEntity>
 
     @Insert
-    suspend fun addGame(gaboumEntity: GameEntity): Long
+    suspend fun addGame(gameEntity: GameEntity): Long
 
     @Update
-    suspend fun updateGame(gaboumEntity: GameEntity): Int
+    suspend fun updateGame(gameEntity: GameEntity): Int
 
     @Delete
-    suspend fun deleteGame(gaboumEntity: GameEntity): Int
+    suspend fun deleteGame(gameEntity: GameEntity): Int
 }

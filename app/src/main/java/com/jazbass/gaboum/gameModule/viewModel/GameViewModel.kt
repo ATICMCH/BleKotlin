@@ -12,25 +12,28 @@ import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.common.utils.Constants
 import com.jazbass.gaboum.gameModule.model.GameInteractor
 
+const val TAG = "View Model"
 class GameViewModel : ViewModel() {
 
     private val result = MutableLiveData<Any>()
     //private val gameSelected = MutableLiveData<Long>()
     private val interactor: GameInteractor = GameInteractor()
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
-    private val gameSelected = MutableLiveData<GameEntity>()
-//    fun setGameSelected(id: Long){
-//        gameSelected.value = id
-//        Log.i("GameSelected" , id.toString())
-//    }
+    private val gameSelected = MutableLiveData<Long>()
+
+    private var gameId = 0L
 
     fun setGameSelected(gameEntity: GameEntity){
-        gameSelected.value = gameEntity
+        gameId = gameEntity.id
     }
 
+//    fun setGameSelected(gameEntity: GameEntity){
+//        gameSelected.value = gameEntity
+//    }
+
     fun getGameSelected(): LiveData<GameEntity>{
-        //return interactor.getGameById(gameSelected.value!!)
-        return gameSelected
+        return interactor.getGameById(gameId)
+        //return gameSelected
     }
 
 //    fun getGamePlayers(): LiveData<List<PlayerEntity>>{

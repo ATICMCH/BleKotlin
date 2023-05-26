@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun launchGameFragment(gameEntity: GameEntity? = GameEntity()){
-        gameViewModel.setGameSelected(gameEntity!!.id)
+        gameViewModel.setGameSelected(gameEntity!!)
 
         val fragment = GameFragment()
         val fragmentManager = supportFragmentManager

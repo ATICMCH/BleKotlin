@@ -1,25 +1,26 @@
 package com.jazbass.gaboum.gameModule.view
 
-import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.os.Bundle
 import com.jazbass.gaboum.R
 import android.view.ViewGroup
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
+import android.view.ContextThemeWrapper
 import androidx.lifecycle.ViewModelProvider
 import com.jazbass.gaboum.common.entities.GameEntity
+import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.google.android.material.textfield.TextInputLayout
 import com.jazbass.gaboum.databinding.FragmentNewGameBinding
-import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 
 class NewGameFragment : Fragment() {
 
     private lateinit var binding: FragmentNewGameBinding
     private lateinit var gameViewModel: GameViewModel
-
+    private val gameEntity = GameEntity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,21 +37,27 @@ class NewGameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding){
-            btnCreateGame.setOnClickListener { launchGameFragment() }
-            btnNewPlayer.setOnClickListener { addNewPlayer() }
-        }
-
-
         setUpViewModel()
+
+        with(binding) {
+            btnCreateGame.setOnClickListener { gameViewModel.saveGame(gameEntity) }
+        }
     }
 
     private fun setUpViewModel() {
 
+        gameViewModel.isShowProgress().observe(viewLifecycleOwner){isShowProgress ->
+            binding.progressBar.visibility = if (isShowProgress) View.VISIBLE else View.GONE
+        }
+
+        gameViewModel.getResult().observe(viewLifecycleOwner){result ->
+            if (result is GameEntity){
+                if (result.id == 0L) launchGameFragment()
+            }
+        }
     }
 
     private fun launchGameFragment(gameEntity: GameEntity = GameEntity()) {
-        gameViewModel.setGameSelected(gameEntity.id)
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
@@ -70,16 +77,20 @@ class NewGameFragment : Fragment() {
         binding.btnCreateGame.visibility = View.GONE
     }
 
-    private fun addNewPlayer() {
-        val customTextInputLayout = PlayerTextInputLayout(ContextThemeWrapper(requireContext(),R.style.CustomOutlinedBox))
-        binding.parentLayout.addView(customTextInputLayout)
+    private fun addNewPlayer(cantidad: Int) { //todo en igles plis
+        val customTextInputLayout =
+            PlayerTextInputLayout(ContextThemeWrapper(requireContext(), R.style.CustomOutlinedBox))
+            for (i: Int in 0 .. cantidad) {
+                binding.parentLayout.addView(customTextInputLayout)
+        }
+        //Todo Data binding para pasarle el hint al edit text o con el init debajo
     }
 
     class PlayerTextInputLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
-        defStyleAttr: Int = R.style.CustomOutlinedBox
-    ) :  TextInputLayout(context, attrs, defStyleAttr) {
+        defStyleAttr: Int = R.style.CustomOutlinedBox,
+    ) : TextInputLayout(context, attrs, defStyleAttr) {
 
         //private val editText: TextInputEditText
 
@@ -98,7 +109,6 @@ class NewGameFragment : Fragment() {
 //            addView(editText)
         }
     }
-
 
 
 }

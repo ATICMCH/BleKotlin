@@ -35,6 +35,7 @@ class NewRowFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
@@ -52,8 +53,6 @@ class NewRowFragment : Fragment() {
     }
 
     private fun setUpViewModel(){
-        gameViewModel.getGamePlayers().observe(viewLifecycleOwner){ players ->
-            mAdapter.submitList(players)
-        }
+
     }
 }
