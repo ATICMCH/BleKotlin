@@ -17,7 +17,5 @@ interface PlayerDao {
     fun getAllUsers(): List<PlayerEntity>
 
     @Query("SELECT * FROM PlayerEntity WHERE game_id = :gameId")
-    fun getUserByGameId(gameId: Long): LiveData<List<PlayerEntity>>
-
-
+    fun getUserByGameId(gameId: Long): List<PlayerEntity>
 }

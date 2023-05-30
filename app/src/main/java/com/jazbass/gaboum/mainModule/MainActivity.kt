@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mainViewModel.getGames().observe(this){ games ->
             mAdapter.submitList(games)
         }
-
         gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
 
     }

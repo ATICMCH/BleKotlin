@@ -18,9 +18,10 @@ import com.jazbass.gaboum.databinding.FragmentNewGameBinding
 
 class NewGameFragment : Fragment() {
 
+    //TODO guardar todos los players en BBDD
+
     private lateinit var binding: FragmentNewGameBinding
     private lateinit var gameViewModel: GameViewModel
-    private val gameEntity = GameEntity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class NewGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewGameBinding.inflate(inflater, container, false)
+        addPlayers(5)
         return binding.root
     }
 
@@ -40,24 +42,30 @@ class NewGameFragment : Fragment() {
         setUpViewModel()
 
         with(binding) {
-            btnCreateGame.setOnClickListener { gameViewModel.saveGame(gameEntity) }
+            btnCreateGame.setOnClickListener { launchGameFragment() }
         }
     }
 
     private fun setUpViewModel() {
 
-        gameViewModel.isShowProgress().observe(viewLifecycleOwner){isShowProgress ->
+        gameViewModel.isShowProgress().observe(viewLifecycleOwner) { isShowProgress ->
             binding.progressBar.visibility = if (isShowProgress) View.VISIBLE else View.GONE
         }
 
-        gameViewModel.getResult().observe(viewLifecycleOwner){result ->
-            if (result is GameEntity){
+        gameViewModel.getResult().observe(viewLifecycleOwner) { result ->
+            if (result is GameEntity) {
                 if (result.id == 0L) launchGameFragment()
             }
         }
     }
 
+    private fun setActionBar() {
+
+    }
+
     private fun launchGameFragment(gameEntity: GameEntity = GameEntity()) {
+
+        gameViewModel.setGameSelected(gameEntity)
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
@@ -77,24 +85,33 @@ class NewGameFragment : Fragment() {
         binding.btnCreateGame.visibility = View.GONE
     }
 
-    private fun addNewPlayer(cantidad: Int) { //todo en igles plis
-        val customTextInputLayout =
-            PlayerTextInputLayout(ContextThemeWrapper(requireContext(), R.style.CustomOutlinedBox))
-            for (i: Int in 0 .. cantidad) {
-                binding.parentLayout.addView(customTextInputLayout)
+    private fun addPlayers(amountPlayers: Int) {
+        for (i: Int in 0..amountPlayers) {
+            PlayerTextInputLayout(
+                ContextThemeWrapper(
+                    requireContext(),
+                    R.style.CustomOutlinedBox
+                ),
+                playerNumber = i+1
+            ).also {
+                binding.parentLayout.addView(it)
+            }
         }
-        //Todo Data binding para pasarle el hint al edit text o con el init debajo
     }
 
     class PlayerTextInputLayout @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = R.style.CustomOutlinedBox,
+        playerNumber: Int
     ) : TextInputLayout(context, attrs, defStyleAttr) {
 
         //private val editText: TextInputEditText
 
         init {
+            val inputLayout = findViewById<TextInputLayout>(R.id.customTIL).apply {
+                hint = "Player $playerNumber"
+            }
             inflate(context, R.layout.custom_text_input_layout, this)
 //            hint = context.getString(R.string.prompt_player2)
 //            isCounterEnabled = true

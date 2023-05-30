@@ -19,21 +19,21 @@ class GameViewModel : ViewModel() {
     //private val gameSelected = MutableLiveData<Long>()
     private val interactor: GameInteractor = GameInteractor()
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
-    private val gameSelected = MutableLiveData<Long>()
+    private val gameSelected = MutableLiveData<GameEntity>()
 
     private var gameId = 0L
 
-    fun setGameSelected(gameEntity: GameEntity){
-        gameId = gameEntity.id
-    }
-
 //    fun setGameSelected(gameEntity: GameEntity){
-//        gameSelected.value = gameEntity
+//        gameId = gameEntity.id
 //    }
 
+    fun setGameSelected(gameEntity: GameEntity){
+        gameSelected.value = gameEntity
+    }
+
     fun getGameSelected(): LiveData<GameEntity>{
-        return interactor.getGameById(gameId)
-        //return gameSelected
+        //return interactor.getGameById(gameId)
+        return gameSelected
     }
 
 //    fun getGamePlayers(): LiveData<List<PlayerEntity>>{
