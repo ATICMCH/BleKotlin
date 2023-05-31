@@ -18,4 +18,5 @@
     <string name="action_new_game">Start game</string>
     <string name="button_start">Start</string>
     <string name="extended_fab_label">+</string>
+    <string name="dialog_new_game_title">How many players?</string>
 </resources>

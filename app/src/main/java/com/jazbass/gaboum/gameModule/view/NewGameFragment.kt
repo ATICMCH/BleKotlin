@@ -1,15 +1,14 @@
 package com.jazbass.gaboum.gameModule.view
 
-import android.util.Log
 import android.view.View
 import android.os.Bundle
 import com.jazbass.gaboum.R
 import android.view.ViewGroup
-import android.content.Context
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.ContextThemeWrapper
+import android.widget.EditText
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
@@ -33,7 +32,12 @@ class NewGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewGameBinding.inflate(inflater, container, false)
-        addPlayers(5)
+        setFragmentResultListener("players"){_, bundle ->
+            bundle.getInt("playersAmount").also {
+                addPlayers(it)
+            }
+        }
+
         return binding.root
     }
 
@@ -86,46 +90,53 @@ class NewGameFragment : Fragment() {
     }
 
     private fun addPlayers(amountPlayers: Int) {
-        for (i: Int in 0..amountPlayers) {
-            PlayerTextInputLayout(
+        for (i: Int in 1..amountPlayers) {
+
+            TextInputLayout(
                 ContextThemeWrapper(
                     requireContext(),
-                    R.style.CustomOutlinedBox
-                ),
-                playerNumber = i+1
-            ).also {
+                    com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox
+                )
+            ).apply {
+                LayoutInflater.from(context).inflate(R.layout.custom_text_input_layout, this, true)
+                this.findViewById<EditText>(R.id.editText).hint = "Player $i"
+            }.also {
                 binding.parentLayout.addView(it)
             }
+//            TextInputLayout(
+//                requireContext()
+//            ).apply {
+//                LayoutInflater.from(context).inflate(R.layout.custom_text_input_layout, this, true)
+//                hint = "Player $i"
+//            }.also {
+//                binding.parentLayout.addView(it)
+//            }
         }
     }
+}
 
-    class PlayerTextInputLayout @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = R.style.CustomOutlinedBox,
-        playerNumber: Int
-    ) : TextInputLayout(context, attrs, defStyleAttr) {
-
-        //private val editText: TextInputEditText
-
-        init {
-            val inputLayout = findViewById<TextInputLayout>(R.id.customTIL).apply {
-                hint = "Player $playerNumber"
-            }
-            inflate(context, R.layout.custom_text_input_layout, this)
-//            hint = context.getString(R.string.prompt_player2)
+//    class PlayerTextInputLayout @JvmOverloads constructor(
+//        context: Context,
+//        attrs: AttributeSet? = null,
+//        defStyleAttr: Int = R.style.CustomOutlinedBox
+//    ) : TextInputLayout(context, attrs, defStyleAttr) {
+//
+//        init {
+//            //inflate(context, R.layout.custom_text_input_layout, this)
+//
+//            //            hint = context.getString(R.string.prompt_player2)
 //            isCounterEnabled = true
 //            counterMaxLength = context.resources.getInteger(R.integer.counter_max_name)
 //            setStartIconDrawable(R.drawable.ic_player)
 //
-//            editText = TextInputEditText(context).apply {
+//            TextInputEditText(context).apply {
 //                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 //                inputType = android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
 //                counterMaxLength = context.resources.getInteger(R.integer.counter_max_name)
+//            }.also {
+//                addView(it)
 //            }
-//            addView(editText)
-        }
-    }
+//        }
+//    }
+//}
 
-
-}

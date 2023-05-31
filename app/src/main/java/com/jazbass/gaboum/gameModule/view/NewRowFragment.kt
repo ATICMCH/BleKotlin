@@ -15,9 +15,9 @@ import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 
 class NewRowFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewRowBinding
     private lateinit var gameViewModel: GameViewModel
     private lateinit var currentGameEntity: GameEntity
+    private lateinit var binding: FragmentNewRowBinding
 
     private lateinit var mAdapter: NewRowAdapter
     private lateinit var mLayout: RecyclerView.LayoutManager
@@ -34,7 +34,6 @@ class NewRowFragment : Fragment() {
         binding =  FragmentNewRowBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
