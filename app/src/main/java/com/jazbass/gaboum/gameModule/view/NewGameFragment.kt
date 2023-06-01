@@ -1,23 +1,20 @@
 package com.jazbass.gaboum.gameModule.view
 
-import android.view.View
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import com.jazbass.gaboum.R
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.ContextThemeWrapper
-import android.widget.EditText
-import android.widget.LinearLayout
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputEditText
 import com.jazbass.gaboum.common.entities.GameEntity
-import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
-import com.google.android.material.textfield.TextInputLayout
+import androidx.fragment.app.setFragmentResultListener
 import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.databinding.FragmentNewGameBinding
+import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputEditText
 
 class NewGameFragment : Fragment() {
 
@@ -103,10 +100,7 @@ class NewGameFragment : Fragment() {
                     com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox
                 )
             ).apply {
-                val textInputEditText = TextInputEditText(ContextThemeWrapper(
-                    requireContext(),
-                    com.google.android.material.R.style.Widget_Material3_TextInputEditText_OutlinedBox
-                ))
+                val textInputEditText = TextInputEditText(requireContext())
                 textInputEditText.hint = "Player $i"
                 this.addView(textInputEditText)
             }.also {
