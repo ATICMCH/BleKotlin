@@ -23,8 +23,6 @@ const val TAG = "GameFragment"
 
 class GameFragment : Fragment() {
 
-    private var isNewGame = false
-    private lateinit var gameEntity: GameEntity
     private lateinit var gameViewModel: GameViewModel
     private lateinit var binding: FragmentGameBinding
 
@@ -45,27 +43,22 @@ class GameFragment : Fragment() {
         binding = FragmentGameBinding.inflate(inflater, container, false).apply {
             fab.setOnClickListener { launchNewRowFragment() }
         }
-        setFragmentResultListener("players") { _, bundle ->
-            val players = bundle.getStringArrayList("playersList")
-            setUpRecyclerView()
-            setUpGame(players)
-        }
+        setUpRecyclerView()
         return binding.root
     }
 
 
     private fun setUpViewModel() {
-        gameViewModel.getGameSelected().observe(viewLifecycleOwner) {
-            gameEntity = it
-            setUIGame(it)
+        gameViewModel.getPlayersList().observe(viewLifecycleOwner){
+            setUpGame(it)
         }
     }
 
 
     private fun launchNewRowFragment() {
-        val fragment = NewRowFragment()
-        val fragmentManager = parentFragmentManager
+      val fragment = NewRowFragment()
 
+        val fragmentManager = parentFragmentManager
         val transaction = fragmentManager.beginTransaction()
 
         with(transaction) {
@@ -76,7 +69,7 @@ class GameFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        mAdapter = CurrentGameLisAdapter()
+        mAdapter = CurrentGameLisAdapter(isRow = false)
         mLayout = LinearLayoutManager(this.context)
 
         binding.recyclerView.apply {
@@ -86,11 +79,9 @@ class GameFragment : Fragment() {
     }
 
 
-    private fun setUpGame(players: ArrayList<String>?) {
-        val playerList: MutableList<PlayerEntity> = mutableListOf()
-        for(player in players!!){
-            playerList.add(PlayerEntity(gameId = 0L, score = 0, name = player))
-            Log.i(TAG, player)
+    private fun setUpGame(playerList: MutableList<PlayerEntity>) {
+        playerList.map {
+            Log.i("Name", it.name.toString())
         }
         mAdapter.submitList(playerList)
     }

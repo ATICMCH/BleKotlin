@@ -9,9 +9,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "PlayerEntity")
 data class PlayerEntity(
     @PrimaryKey(autoGenerate = true) var id: Long = 0,
-    @ColumnInfo(name = "game_id") var gameId: Long?,
+    @ColumnInfo(name = "game_id") var gameId: Long = 0,
     var name: String?,
-    var score: Int?
+    var score: Int = 0
 ) {
-    constructor() : this(gameId = 0L, score = 0, name = "")
+    constructor() : this(name = "")
 }

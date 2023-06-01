@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/player"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             tools:text="Pepe"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,12 +40,12 @@
 
         <TextView
             android:id="@+id/scorePlayer"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:text="20"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnDecrease"
-            app:layout_constraintStart_toEndOf="@+id/btnIncrease"
+            app:layout_constraintEnd_toStartOf="@+id/btnIncrease"
+            app:layout_constraintStart_toEndOf="@+id/btnDecrease"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button

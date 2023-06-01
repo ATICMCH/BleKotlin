@@ -2,17 +2,21 @@ package com.jazbass.gaboum.gameModule.view
 
 import android.view.View
 import android.os.Bundle
+import android.util.Log
 import com.jazbass.gaboum.R
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.ContextThemeWrapper
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputEditText
 import com.jazbass.gaboum.common.entities.GameEntity
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 import com.google.android.material.textfield.TextInputLayout
+import com.jazbass.gaboum.common.entities.PlayerEntity
 import com.jazbass.gaboum.databinding.FragmentNewGameBinding
 
 class NewGameFragment : Fragment() {
@@ -21,6 +25,8 @@ class NewGameFragment : Fragment() {
 
     private lateinit var binding: FragmentNewGameBinding
     private lateinit var gameViewModel: GameViewModel
+
+    private val tilList = mutableListOf<TextInputLayout>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +43,6 @@ class NewGameFragment : Fragment() {
                 addPlayers(it)
             }
         }
-
         return binding.root
     }
 
@@ -56,11 +61,11 @@ class NewGameFragment : Fragment() {
             binding.progressBar.visibility = if (isShowProgress) View.VISIBLE else View.GONE
         }
 
-        gameViewModel.getResult().observe(viewLifecycleOwner) { result ->
-            if (result is GameEntity) {
-                if (result.id == 0L) launchGameFragment()
-            }
-        }
+//        gameViewModel.getResult().observe(viewLifecycleOwner) { result ->
+//            if (result is GameEntity) {
+//                if (result.id == 0L) launchGameFragment()
+//            }
+//        }
     }
 
     private fun setActionBar() {
@@ -69,19 +74,20 @@ class NewGameFragment : Fragment() {
 
     private fun launchGameFragment(gameEntity: GameEntity = GameEntity()) {
 
-        gameViewModel.setGameSelected(gameEntity)
+        val playerList = mutableListOf<PlayerEntity>()
+
+        tilList.map { til ->
+            val name = if (til.editText?.text.toString() == "") til.hint as String
+                    else til.editText?.text.toString()
+            playerList.add(PlayerEntity(name = name))
+        }
+
+        gameViewModel.setPlayersList(playerList)
+        //gameViewModel.setGameSelected(gameEntity)
 
         val fragment = GameFragment()
         val fragmentManager = parentFragmentManager
-
-        Bundle().apply {
-            putStringArrayList("playersList", arrayListOf("Claire", "Javier"))
-        }.also {
-            fragmentManager.setFragmentResult("players", it)
-        }
-        val transaction = fragmentManager.beginTransaction()
-
-        with(transaction) {
+        fragmentManager.beginTransaction().run {
             replace(R.id.containerMain, fragment)
             addToBackStack(null)
             commit()
@@ -91,52 +97,24 @@ class NewGameFragment : Fragment() {
 
     private fun addPlayers(amountPlayers: Int) {
         for (i: Int in 1..amountPlayers) {
-
             TextInputLayout(
                 ContextThemeWrapper(
                     requireContext(),
                     com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox
                 )
             ).apply {
-                LayoutInflater.from(context).inflate(R.layout.custom_text_input_layout, this, true)
-                this.findViewById<EditText>(R.id.editText).hint = "Player $i"
+                val textInputEditText = TextInputEditText(ContextThemeWrapper(
+                    requireContext(),
+                    com.google.android.material.R.style.Widget_Material3_TextInputEditText_OutlinedBox
+                ))
+                textInputEditText.hint = "Player $i"
+                this.addView(textInputEditText)
             }.also {
                 binding.parentLayout.addView(it)
+                tilList.add(it)
             }
-//            TextInputLayout(
-//                requireContext()
-//            ).apply {
-//                LayoutInflater.from(context).inflate(R.layout.custom_text_input_layout, this, true)
-//                hint = "Player $i"
-//            }.also {
-//                binding.parentLayout.addView(it)
-//            }
         }
     }
 }
 
-//    class PlayerTextInputLayout @JvmOverloads constructor(
-//        context: Context,
-//        attrs: AttributeSet? = null,
-//        defStyleAttr: Int = R.style.CustomOutlinedBox
-//    ) : TextInputLayout(context, attrs, defStyleAttr) {
-//
-//        init {
-//            //inflate(context, R.layout.custom_text_input_layout, this)
-//
-//            //            hint = context.getString(R.string.prompt_player2)
-//            isCounterEnabled = true
-//            counterMaxLength = context.resources.getInteger(R.integer.counter_max_name)
-//            setStartIconDrawable(R.drawable.ic_player)
-//
-//            TextInputEditText(context).apply {
-//                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-//                inputType = android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
-//                counterMaxLength = context.resources.getInteger(R.integer.counter_max_name)
-//            }.also {
-//                addView(it)
-//            }
-//        }
-//    }
-//}
 

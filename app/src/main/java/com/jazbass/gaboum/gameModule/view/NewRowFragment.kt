@@ -7,19 +7,17 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.jazbass.gaboum.common.entities.GameEntity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jazbass.gaboum.gameModule.adapter.NewRowAdapter
 import com.jazbass.gaboum.databinding.FragmentNewRowBinding
+import com.jazbass.gaboum.gameModule.adapter.CurrentGameLisAdapter
 import com.jazbass.gaboum.gameModule.viewModel.GameViewModel
 
 class NewRowFragment : Fragment() {
 
     private lateinit var gameViewModel: GameViewModel
-    private lateinit var currentGameEntity: GameEntity
     private lateinit var binding: FragmentNewRowBinding
 
-    private lateinit var mAdapter: NewRowAdapter
+    private lateinit var mAdapter: CurrentGameLisAdapter
     private lateinit var mLayout: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +40,7 @@ class NewRowFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        mAdapter = NewRowAdapter()
+        mAdapter = CurrentGameLisAdapter(isRow = true)
         mLayout = LinearLayoutManager(this.context)
 
         binding.recyclerView.apply {
@@ -52,6 +50,8 @@ class NewRowFragment : Fragment() {
     }
 
     private fun setUpViewModel(){
-
+        gameViewModel.getPlayersList().observe(viewLifecycleOwner){
+            mAdapter.submitList(it)
+        }
     }
 }
