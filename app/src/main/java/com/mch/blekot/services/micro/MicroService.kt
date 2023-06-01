@@ -7,6 +7,10 @@ import kotlin.math.roundToLong
 import android.content.Context
 import android.media.MediaRecorder
 import android.annotation.SuppressLint
+import androidx.test.core.app.ActivityScenario.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
 
@@ -74,6 +78,19 @@ object MicroService {
             }
         }
     }
+
+//    private fun startMeasure() {
+//        runBlocking {
+//            while (continueMeasure) {
+//                try {
+//                    delay(INTERVAL_GET_DECIBEL)
+//                    measureDecibels()
+//                } catch (e: InterruptedException) {
+//                    e.printStackTrace()
+//                }
+//            }
+//        }
+//    }
 
     private fun measureDecibels() {
         val amplitude: Double? = mRecorder?.maxAmplitude?.toDouble()

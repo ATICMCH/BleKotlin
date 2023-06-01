@@ -14,6 +14,9 @@ import com.mch.blekot.common.Constants
 import com.mch.blekot.common.JsonManager
 import com.mch.blekot.common.getTime
 import com.mch.blekot.model.socket.SocketSingleton
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
 const val TAG = "RECORDER"
@@ -31,23 +34,33 @@ class Recorder( mContext: Context) {
     fun startRecorder() {
         localPath = destPath
         localPath += "/${Constants.ID}_${getTime()}.m4a"
-
         Log.i(TAG, localPath)
-        recorder = MediaRecorder().apply {
-            try {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-                setOutputFile(localPath)
-                prepare()
-                start()
-                Log.i(TAG, "Start Recorder")
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+        runBlocking {
+            val job = launch{
+                recorder = MediaRecorder().apply {
+                    try {
+                        setAudioSource(MediaRecorder.AudioSource.MIC)
+                        setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                        setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                        setOutputFile(localPath)
+                        prepare()
+                        start()
+                        Log.i(TAG, "Start Recorder")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            delay(10000)
+            while (job.isActive){
+                Log.i(TAG, "recording")
+            }
+            if(job.isCompleted){
+                stopRecording()
             }
         }
-        Thread.sleep(10000)
-        stopRecording()
+
     }
 
     private fun stopRecording() {
@@ -69,6 +82,7 @@ class Recorder( mContext: Context) {
     }
 
     private fun sendAudio(file: File) {
+
         Log.i(TAG, "sendAudio")
 
         JSONObject().apply {
