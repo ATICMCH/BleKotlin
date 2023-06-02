@@ -30,6 +30,10 @@ class CurrentGameLisAdapter(val isRow: Boolean) :
         }
     }
 
+    fun getItemScore(position: Int): Int {
+        return getItem(position).score
+    }
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = EntityItemBinding.bind(view)
 
@@ -40,16 +44,18 @@ class CurrentGameLisAdapter(val isRow: Boolean) :
                     btnIncrease.visibility = View.INVISIBLE
                     scorePlayer.text = player.score.toString().trim()
                 } else{
-                    scorePlayer.text = "0"
+                    player.score = 0
+
+                    scorePlayer.text = player.score.toString()
+
                     btnIncrease.setOnClickListener {
-                        var score = scorePlayer.text.toString().toInt()
-                        score ++
-                        binding.scorePlayer.text = score.toString()
+                        player.score ++
+                        scorePlayer.text = player.score.toString()
                     }
+
                     btnDecrease.setOnClickListener {
-                        var score = scorePlayer.text.toString().toInt()
-                        score --
-                        binding.scorePlayer.text = score.toString()
+                        player.score --
+                        scorePlayer.text = player.score.toString()
                     }
                 }
 

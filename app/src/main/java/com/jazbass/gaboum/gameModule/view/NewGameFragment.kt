@@ -20,8 +20,8 @@ class NewGameFragment : Fragment() {
 
     //TODO guardar todos los players en BBDD
 
-    private lateinit var binding: FragmentNewGameBinding
     private lateinit var gameViewModel: GameViewModel
+    private lateinit var binding: FragmentNewGameBinding
 
     private val tilList = mutableListOf<TextInputLayout>()
 
@@ -31,8 +31,7 @@ class NewGameFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentNewGameBinding.inflate(inflater, container, false)
         setFragmentResultListener("players"){_, bundle ->
