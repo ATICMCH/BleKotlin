@@ -51,8 +51,13 @@ El tipo de acción = "type" siento 1 para agregar y 2 para eliminar
 ```
 ### Respuestas
 
-Al finalizar una función, en caso de éxito el valor de **status** será **1**, en caso de error los valores 
-pueden ser:
+Las respuestas son en formato **json** y se crean en com.mch.blekot.common.JsonManager.kt. Cuando se
+envía la respuesta a través de la función com.mch.blekot.model.socket.SocketSingleton.emitResponse()
+es cuando se da por finalizada una acción (isProcessActive = false) y el móvil queda listo para 
+recibir una nueva petición. Es **Muy importante** que tanto en los posibles errores, como en las 
+acciones realizadas exitosamente se llame a ésta función.
+
+En caso de éxito el valor de **status** será **1**, en caso de error los valores pueden ser:
 ```
  0 --> Hay una petición pendiente
 -1 --> Error no especificado
@@ -64,6 +69,19 @@ pueden ser:
 -7 --> Error en la respuesta de WeLock-API, puede que los parámetros sean erróneos o que la manija no 
 esté activada
 ```
+
+Además, en la respuesta podemos devolver información reelevante como:
+
+```
+"msg": Información
+"clientFrom": El nombre (ID) del móvil
+"startTime": Por ejemplo de validez
+"endTime": Idem
+"lockBattery": La bateria restante en la manija
+"date" : Fecha de la petición
+```
+
+
 ### Tiempos de espera
 ```
 Cada petición tiene un máximo de 3 minutos para ser gestionada, en caso de superar este tiempo se cancelará la 

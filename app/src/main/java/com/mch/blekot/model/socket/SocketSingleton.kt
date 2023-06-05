@@ -21,12 +21,12 @@ import com.mch.blekot.model.ble.Ble
 
 class SocketSingleton private constructor() {
 
-    private var isProcessActive = false
-    var clientFromServer = ""
     val socket: Socket
+    var clientFromServer = ""
     var endTime: String? = null
     var startTime: String? = null
     var isConnected: Boolean = false
+    private var isProcessActive = false
 
     //Constructor
     init {
@@ -79,6 +79,12 @@ class SocketSingleton private constructor() {
                  * */
 
                 when (action) {
+
+                    //TODO: Create function for start recording with button
+                    Constants.ACTION_START_RECORDING -> executeAction {
+                        Interactor.startRecord()
+                    }
+
 
                     Constants.ACTION_OPEN_LOCK -> executeAction {
 

@@ -9,6 +9,8 @@ import com.mch.blekot.model.ble.Ble
 import com.mch.blekot.model.welock.WeLock
 import com.mch.blekot.common.JsonManager
 import com.mch.blekot.model.socket.SocketSingleton
+import com.mch.blekot.services.micro.MicroService
+import com.mch.blekot.services.micro.Recorder
 
 object Interactor : ActionManagerAux {
 
@@ -64,6 +66,7 @@ object Interactor : ActionManagerAux {
         Ble.connectDevice()
     }
 
+    //TODO: delete or update function
     override suspend fun getRecord() {
         mAction = Constants.READ_RECORD
 
@@ -104,6 +107,11 @@ object Interactor : ActionManagerAux {
                 status = Constants.STATUS_ARDUINO_ERROR
             )
         }
+    }
+
+    fun startRecord(){
+        MicroService.stopRecorder()
+        Recorder().startRecorder()
     }
 
     fun setAction(action: Int) {

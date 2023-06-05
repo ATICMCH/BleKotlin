@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     private val fragment = InfoFragment()
+    private lateinit var microService: MicroService
 
     override
     fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +59,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         launchSocketService()
+
+        Constants.destPath = applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
     }
 
     private fun launchInfoFragment() {
@@ -96,10 +99,9 @@ class MainActivity : AppCompatActivity() {
 
     fun launchMicro() {
         if (SocketSingleton.socketInstance!!.isConnected) {
-            with(MicroService) {
+            microService = MicroService.apply{
                 setContext(applicationContext)
                 setUpRecorder()
-                launchDecibelsMeasure()
             }
         }
     }

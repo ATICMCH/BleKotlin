@@ -1,38 +1,26 @@
 package com.mch.blekot.services.micro
 
-import android.content.Context
 import java.io.File
-import java.net.Socket
 import android.util.Log
-import java.io.FileInputStream
-import java.io.DataOutputStream
-import android.media.MediaPlayer
-import android.media.MediaRecorder
-import android.os.CountDownTimer
-import java.io.BufferedInputStream
-import com.mch.blekot.common.Constants
-import com.mch.blekot.common.JsonManager
-import com.mch.blekot.common.getTime
-import com.mch.blekot.model.socket.SocketSingleton
+import org.json.JSONObject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.media.MediaRecorder
+import com.mch.blekot.common.getTime
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
+import com.mch.blekot.common.Constants
+import com.mch.blekot.model.socket.SocketSingleton
 
 const val TAG = "RECORDER"
 
-class Recorder( mContext: Context) {
+class Recorder {
 
     private var localPath = ""
     private var isRecording = false
-    private lateinit var recorder: MediaRecorder
-
-    //Tomamos el path del almacenamiento de Android.
-    private val destPath: String =
-        mContext.applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
+    private var recorder: MediaRecorder? = null
 
     fun startRecorder() {
-        localPath = destPath
+        localPath = Constants.destPath
         localPath += "/${Constants.ID}_${getTime()}.m4a"
         Log.i(TAG, localPath)
 
@@ -60,13 +48,13 @@ class Recorder( mContext: Context) {
                 stopRecording()
             }
         }
-
     }
 
     private fun stopRecording() {
         try {
-            recorder.stop()
-            recorder.release()
+            recorder?.stop()
+            recorder?.release()
+            recorder = null
             isRecording = false
 
             Log.i(TAG, "path: $localPath")
@@ -91,6 +79,11 @@ class Recorder( mContext: Context) {
         }.also { audioFile ->
             SocketSingleton.socketInstance?.socket?.emit("file", Constants.ID, audioFile)
         }
+        restartMicroService()
+    }
+
+    private fun restartMicroService(){
+        MicroService.setUpRecorder()
     }
 }
 

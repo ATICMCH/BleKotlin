@@ -3,16 +3,15 @@ package com.mch.blekot.services.micro
 import java.util.*
 import android.util.Log
 import kotlin.math.log10
+import kotlinx.coroutines.*
 import kotlin.math.roundToLong
 import android.content.Context
 import android.media.MediaRecorder
+import com.mch.blekot.MainActivity
+import androidx.lifecycle.Lifecycle
 import android.annotation.SuppressLint
-import androidx.test.core.app.ActivityScenario.launch
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-
-const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 
 /*
 * DECIBEL_DATA_LENGTH es la cantidad de registros que se almacenaran en el stack que guarda los
@@ -22,17 +21,18 @@ const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
 */
 
 const val DECIBEL_DATA_LENGTH = 4
-const val INTERVAL_GET_DECIBEL = 3000L
+const val INTERVAL_GET_DECIBEL = 3000L //segundos (como Francia)
 
-const val EMA_FILTER = 0.6
+const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
+const val EMA_FILTER = 0.6 // No tocar
+
 
 @SuppressLint("StaticFieldLeak")
-object MicroService {
+object MicroService : LifecycleOwner {
 
     private var mEMA = 0.0
     private var decibels = 0.0
     private var continueMeasure = true
-    private const val TAG = "MicroService"
     private var mRecorder: MediaRecorder? = null
     private var decibelsHistory: Stack<Double> = Stack()
 
@@ -48,7 +48,7 @@ object MicroService {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-                setOutputFile("/dev/null")
+                setOutputFile("/dev/null")//Este path es para que no guarde lo que se graba
             }.also { recorder ->
                 try {
                     recorder.prepare()
@@ -57,45 +57,35 @@ object MicroService {
                 }
             }
         }
+        continueMeasure = true
+        launchDecibelsMeasure()
     }
+
     //TODO: Liberar los recursos del recorder
-    fun launchDecibelsMeasure() {
+
+    private fun launchDecibelsMeasure() {
         try {
             mRecorder?.start()
-            runner?.start()
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
 
-    private var runner: Thread? = Thread {
-        while (continueMeasure) {
-            try {
-                Thread.sleep(INTERVAL_GET_DECIBEL)
+        executeAction {
+            while (continueMeasure) {
+                delay(INTERVAL_GET_DECIBEL)
                 measureDecibels()
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
+
+                if (!continueMeasure) {
+                    break
+                }
             }
         }
     }
 
-//    private fun startMeasure() {
-//        runBlocking {
-//            while (continueMeasure) {
-//                try {
-//                    delay(INTERVAL_GET_DECIBEL)
-//                    measureDecibels()
-//                } catch (e: InterruptedException) {
-//                    e.printStackTrace()
-//                }
-//            }
-//        }
-//    }
-
     private fun measureDecibels() {
-        val amplitude: Double? = mRecorder?.maxAmplitude?.toDouble()
-        if (amplitude!! > 0 && amplitude < 1000000) {
-            decibels = convertDb(amplitude)
+        val maxAmplitude: Double? = mRecorder?.maxAmplitude?.toDouble()
+        if (maxAmplitude!! > 0 && maxAmplitude < 1000000) {
+            decibels = convertDb(maxAmplitude)
             if (decibelsHistory.size >= DECIBEL_DATA_LENGTH) {
                 if (decibelMedia(decibelsHistory) > RUIDO_MIN) {
                     noiseExceeded()
@@ -110,15 +100,20 @@ object MicroService {
         decibelsHistory.clear();
         continueMeasure = false
 
+        executeAction { stopRecorder() }
+
+        Recorder().run {
+            startRecorder()
+        }
+    }
+
+    fun stopRecorder() {
         try {
             mRecorder?.stop()
             mRecorder?.release()
+            mRecorder = null
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-
-        Recorder(mContext).run {
-            startRecorder()
         }
     }
 
@@ -129,6 +124,13 @@ object MicroService {
             med += decHist.pop()
         }
         return (med / sizeTmp * 100.0 / 100.0).roundToLong().toDouble()
+    }
+
+
+    private fun executeAction(block: suspend () -> Unit): Job {
+        return GlobalScope.launch(Dispatchers.IO) {
+            block()
+        } ?: return Job()
     }
 
 
@@ -152,4 +154,34 @@ object MicroService {
 
         return (20 * log10(mEMA / 51805.5336 / 0.000028251) * 100).roundToLong() / 100.0
     }
+
+    override fun getLifecycle(): Lifecycle {
+        return MainActivity.getInstance()!!.lifecycle
+    }
 }
+
+
+
+
+//    private var runner: Thread? = Thread {
+//        while (continueMeasure) {
+//            try {
+//                Thread.sleep(INTERVAL_GET_DECIBEL)
+//                measureDecibels()
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+
+//    private fun startMeasure() {
+//        runBlocking {
+//            while (continueMeasure) {
+//                try {
+//                    delay(INTERVAL_GET_DECIBEL)
+//                    measureDecibels()
+//                } catch (e: InterruptedException) {
+//                    e.printStackTrace()
+//                }
+//        }
+//    }

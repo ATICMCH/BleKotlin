@@ -2,6 +2,8 @@ package com.mch.blekot.common
 
 object Constants {
 
+
+
     /*********************Pruebas**********************/
 
     const val ID = "Prueba200"
@@ -13,7 +15,7 @@ object Constants {
     //const val URL_TCP: String = "https://tcpmch2022.fly.dev"
 
     //Localhost Javier :)
-    const val URL_TCP = "http://192.168.0.40:3002/"
+    const val URL_TCP = "http://192.168.0.40:8080/"
 
     const val PATH_OPEN_PORTAL = "portal/open"
 
@@ -35,18 +37,18 @@ object Constants {
 
     const val ACTION_LOG = "Log"
     const val ACTION_ADMIN = "admin"
-    const val RESPONSE_SOCKET_BLUETOOTH = "ResponseSocketBluetooth"
     const val MESSAGE = "Conectado"
+    const val RESPONSE_SOCKET_BLUETOOTH = "ResponseSocketBluetooth"
 
     const val PARAMETER_QR = "Qr"
     const val PARAMETER_CMD = "cmd"
+    const val PARAMETER_TYPE = "type"
     const val PARAMETER_DAYS = "days"
     const val PARAMETER_CODE = "code"
     const val PARAMETER_INDEX = "index"
     const val PARAMETER_TIMES = "times"
-    const val PARAMETER_TYPE = "type"
-    const val PARAMETER_SYNC_TIME = "syncTime"
     const val PARAMETER_DEVICE_ID = "deviceId"
+    const val PARAMETER_SYNC_TIME = "syncTime"
     const val PARAMETER_IP_ARDUINO = "ipArduino"
     const val PARAMETER_DEVICE_NAME ="deviceName"
     const val PARAMETER_MAC_ADDRESS = "macAddress"
@@ -71,9 +73,10 @@ object Constants {
     const val CODE_TIMEOUT = -6
     const val CODE_MSG_PARAMS = -7
 
+    const val MSG_OK = "Se ha procesado exitosamente la peticion"
+
     const val MSG_PENDANT = "Hay una peticion pendiente"
     const val MSG_KO = "Error con el dispositivo Bluetooth"
-    const val MSG_OK = "Se ha procesado exitosamente la peticion"
     const val MSG_NULL_POINT = "Faltan enviar parametros al móvil"
     const val MSG_BLE_OFF = "El bluetooth del móvil no se encuentra activado"
     const val MSG_PARAMS = "Error en WeLock-API, parametros erroneos o manija no activada"
@@ -93,12 +96,6 @@ object Constants {
     const val SYNC_TIME_OK = 1
     const val SYNC_TIME_ERROR = -1
 
-    /*******************Recorder*******************/
-
-    const val NOISE_MIN = 50.00
-    const val DECIBEL_DATA_LENGTH = 60
-    const val INTERVAL_GET_DECIBEL: Long = 1000
-
     /*************Socket CMD MANAGER**************/
 
     const val ACTION_OPEN_LOCK = "openLock"
@@ -106,6 +103,8 @@ object Constants {
     const val ACTION_SET_CARD = "setCard"
     const val ACTION_OPEN_PORTAL = "openPortal"
     const val ACTION_SYNC_TIME = "syncTime"
+
+    const val ACTION_START_RECORDING = "startRec"
 
     /*****************ACTION MANAGER*****************/
 
@@ -116,5 +115,10 @@ object Constants {
     const val READ_RECORD = 5
     const val GET_BATTERY = 6
     const val TIME_SYNCHRONIZED = 7
+
+    /*****************Path para guardar archivos*****************/
+
+    var destPath: String = ""
+
 
 }
