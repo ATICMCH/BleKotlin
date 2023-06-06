@@ -114,8 +114,7 @@ problema con la manija ya que el móvil no está localizándola.
       "primaryTextColor": "#fff",
       "primaryBorderColor": "#f18420",
       "lineColor": "#1387c9",
-      "secondaryColor": "#0d1117",
-      "tertiaryColor": "#fff"
+      "secondaryColor": "#0d1117"
     }
 }
 }%%
