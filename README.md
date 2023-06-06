@@ -2,7 +2,7 @@
 
 ## Aplicación para domotizar las viviendas.
 
-#Author
+Author
 
 **JazBass**
 
