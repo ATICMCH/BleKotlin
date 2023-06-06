@@ -56,6 +56,7 @@ object Ble {
         var macAddress = ""
 
         //Verificamos si el dispositivo ya esta emparejado para evitar el scaneo
+
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
             val deviceName = device.name
@@ -95,7 +96,7 @@ object Ble {
         val scanSettings = ScanSettings.Builder().setScanMode(SCAN_MODE_LOW_LATENCY).build()
 
         bluetoothLeScanner!!.startScan(scanFilter, scanSettings, leScanCallback)
-        delay(30000)//30 seconds
+        delay(30000)//30 segundos
         if (isScanning){
             Log.i(TAG, "disconnect")
             bluetoothLeScanner.stopScan(leScanCallback)
@@ -125,7 +126,7 @@ object Ble {
     @OptIn(ExperimentalUnsignedTypes::class)
     private val mGattCallback: BluetoothGattCallback = object : BluetoothGattCallback() {
 
-        /** The following callbacks are in order, each fun execute the next one  **/
+        /** Los siguientes callbacks están en orden, cada uno ejecuta el siguiente  **/
 
         /*-----------------------1º-----------------------*/
 
@@ -145,6 +146,7 @@ object Ble {
         /*-----------------------2º-----------------------*/
 
         /*Nos suscribimos a las notificaciones y escribimos el descriptor*/
+
         @SuppressLint("MissingPermission")
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             super.onServicesDiscovered(gatt, status)
@@ -209,7 +211,7 @@ object Ble {
 
                 if (characteristic[0] == 85) {
                     when (characteristic[1]) {
-                        /** All responses start with 48 except SetCard **/
+                        /** Todas las respuestas empiezan por 48 salvo la de SetCard **/
                         48 -> {
                             val rndNumber = characteristic[2]
                             val devicePower = characteristic[3]
@@ -219,7 +221,7 @@ object Ble {
                             Interactor.getToken(devicePower.toString(), rndNumber.toString())
                             return@executeAction
                         }
-                        /** SetCard Response **/
+                        /** Respuesta de SetCard -> 49  **/
                         49 -> {
                             if (characteristic[2] != 1) Log.i(TAG, "ERROR")
                         }

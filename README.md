@@ -1,6 +1,6 @@
 # BleKotlin
 
-## Aplicación para controlar las viviendas.
+## Aplicación para domotizar las viviendas.
 
 ### Importante
 ```
@@ -92,6 +92,11 @@ encontrar el móvil, por lo que si este error se repite reiteradas veces es prob
 problema con la manija ya que el móvil no está localizándola.
 ```
 
+#Author
+**JazBass**
+*Android Developer*
+>All rights reserved ®
+[Find me on LinkedIn](https://www.linkedin.com/in/jazbass/)
 
 
 

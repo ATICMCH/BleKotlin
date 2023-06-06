@@ -2,8 +2,6 @@ package com.mch.blekot.common
 
 object Constants {
 
-
-
     /*********************Pruebas**********************/
 
     const val ID = "Prueba200"
@@ -88,11 +86,11 @@ object Constants {
     const val ERROR_LENGTH = "Error en la cantidad de caracteres"
     const val ERROR_ONLY_NUMBERS = "El ID debe contener solo numeros"
 
-    const val STATUS_LOCK = -1
     const val STATUS_ARDUINO_OK = 1
+
+    const val STATUS_LOCK = -1
     const val STATUS_ARDUINO_ERROR = -1
     const val STATUS_BLE_DISCONNECT = -1
-
     const val SYNC_TIME_OK = 1
     const val SYNC_TIME_ERROR = -1
 
