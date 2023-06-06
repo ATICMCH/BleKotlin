@@ -105,6 +105,21 @@ problema con la manija ya que el móvil no está localizándola.
 ### El flujo de la app sería algo así
 
 ```mermaid
+
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#BB2528',
+      'primaryTextColor': '#fff',
+      'primaryBorderColor': '#7C0000',
+      'lineColor': '#F8B229',
+      'secondaryColor': '#006100',
+      'tertiaryColor': '#fff'
+    }
+  }
+}%%
+
 graph LR
 TCP -->|json| A
 A[SOCKET] -->|action|B(Interactor)
@@ -133,20 +148,6 @@ I --> |response|F
 
 B -->
 A --> TCP
-
-{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
-    }
-  }
-}
 ```
 
 
