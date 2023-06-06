@@ -134,7 +134,7 @@ I --> |response|F
 B -->
 A --> TCP
 
-%%{
+{
   init: {
     'theme': 'base',
     'themeVariables': {
@@ -146,7 +146,7 @@ A --> TCP
       'tertiaryColor': '#fff'
     }
   }
-}%%
+}
 ```
 
 
