@@ -54,11 +54,14 @@ El nuevo código = "code"
 Index donde se almacenará = "index"
 cantidad de veces que se podrá usar  = "times"
 ```
+
 Y para set card
+
  ```
 El QR de la llave = "qr"
 El tipo de acción = "type" siento 1 para agregar y 2 para eliminar
 ```
+
 ### Respuestas
 
 Las respuestas son en formato **json** y se crean en com.mch.blekot.common.JsonManager.kt. Cuando se
@@ -68,6 +71,7 @@ recibir una nueva petición. Es **Muy importante** que tanto en los posibles err
 acciones realizadas exitosamente se llame a ésta función.
 
 En caso de éxito el valor de **status** será **1**, en caso de error los valores pueden ser:
+
 ```
  0 --> Hay una petición pendiente
 -1 --> Error no especificado
@@ -120,14 +124,15 @@ problema con la manija ya que el móvil no está localizándola.
 }%%
 
 graph LR
+
 TCP -->|json| A
 A[SOCKET] -->|action|B{Interactor}
 
 B -->|1º|BLE[BLE]
 BLE--> |2º|B
 
-B -->|3º|E[Welock]
-E-->|4º|B
+B -->|3º|Welock[Welock]
+Welock-->|4º|B
 
 B -->|5º|F[BLE]
 F -->|6º|B
@@ -136,11 +141,14 @@ BLE --> |ask| MANIJA(Manija)
 MANIJA -->|rdm num & battery| BLE
 
 
-H((Welock API)) -.->|token| E
-E -.->|ask token| H
+H((WelockAPI))
+P((WelockAPI))
 
-E --> |ask hex|H
-H -->|hex| E
+H -.->|res token| Welock
+Welock -.->|ask token| H
+
+Welock --> |ask hex|P
+P -->|res hex| Welock
 
 F --> |hex| I(Manija)
 I --> |res|F
