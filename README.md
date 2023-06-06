@@ -103,6 +103,34 @@ problema con la manija ya que el móvil no está localizándola.
 ```
 
 
+```mermaid
+graph LR
+TCP -->
+A[SOCKET] -->B(Interactor)
+
+B -->BLE[BLE]
+BLE--> B
+
+B -->E[Welock]
+E-->B
+
+B -->F[BLE]
+F -->B
+
+BLE -->  MANIJA[Manija]
+MANIJA -->|rdm num & battery| BLE
+
+E --> H[Welock API]
+H -->|hex| E
+
+
+F --> |hex| I[Manija]
+I --> |response|F
+
+B -->
+A --> TCP
+```
+
 
 
 

@@ -74,7 +74,7 @@ class SocketSingleton private constructor() {
                  * Las acciones que incluyan funciones bluetooth validarán en primer lugar
                  * que los parametros (credenciales de la manija) estén correctos y en caso de que
                  * alguno este mal lanzará un error y devolverá un mensaje al socket con el error
-
+                 -----------------------------------------------------------------------------------
                  * Mismo procedimiento para la funcion del arduino que valida la url
                  * */
 
