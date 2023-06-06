@@ -102,12 +102,12 @@ encontrar el móvil, por lo que si este error se repite reiteradas veces es prob
 problema con la manija ya que el móvil no está localizándola.
 ```
 
-### Flujo de la app
+### El flujo de la app sería algo así
 
 ```mermaid
 graph LR
-TCP -->
-A[SOCKET] -->B(Interactor)
+TCP -->|json| A
+A[SOCKET] -->|action|B(Interactor)
 
 B -->BLE[BLE]
 BLE--> B
@@ -118,13 +118,14 @@ E-->B
 B -->F[BLE]
 F -->B
 
-BLE -->  MANIJA[Manija]
+BLE --> |ask| MANIJA[Manija]
 MANIJA -->|rdm num & battery| BLE
 
-E --> H[Welock API]
-H -.->|token| E
 
-E -.-> H[Welock API]
+H -.->|token| E
+E -.->|ask token| H[Welock API]
+
+E --> |ask hex|H[Welock API]
 H -->|hex| E
 
 F --> |hex| I[Manija]
