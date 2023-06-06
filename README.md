@@ -143,10 +143,10 @@ E --> |ask hex|H[Welock API]
 H -->|hex| E
 
 F --> |hex| I[Manija]
-I --> |response|F
+I --> |res|F
 
-B -->
-A --> TCP
+B -->|res|A
+A -->|res| TCP
 ```
 
 
