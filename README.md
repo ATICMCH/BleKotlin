@@ -121,32 +121,32 @@ problema con la manija ya que el móvil no está localizándola.
 
 graph LR
 TCP -->|json| A
-A[SOCKET] -->|action|B(Interactor)
+A[SOCKET] -->|action|B{Interactor}
 
-B -->BLE[BLE]
-BLE--> B
+B -->|1º|BLE[BLE]
+BLE--> |2º|B
 
-B -->E[Welock]
-E-->B
+B -->|3º|E[Welock]
+E-->|4º|B
 
-B -->F[BLE]
-F -->B
+B -->|5º|F[BLE]
+F -->|6º|B
 
-BLE --> |ask| MANIJA[Manija]
+BLE --> |ask| MANIJA(Manija)
 MANIJA -->|rdm num & battery| BLE
 
 
-H -.->|token| E
-E -.->|ask token| H[Welock API]
+H((Welock API)) -.->|token| E
+E -.->|ask token| H
 
-E --> |ask hex|H[Welock API]
+E --> |ask hex|H
 H -->|hex| E
 
-F --> |hex| I[Manija]
+F --> |hex| I(Manija)
 I --> |res|F
 
 B -->|res|A
-A -->|res| TCP
+A --> |res|TCP
 ```
 
 
