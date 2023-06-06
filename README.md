@@ -108,16 +108,16 @@ problema con la manija ya que el móvil no está localizándola.
 
 %%{
   init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
+    "theme": "base",
+    "themeVariables": {
+      "primaryColor": "#f18420",
+      "primaryTextColor": "#fff",
+      "primaryBorderColor": "#f18420",
+      "lineColor": "#1387c9",
+      "secondaryColor": "#9d9ea0",
+      "tertiaryColor": "#fff"
     }
-  }
+}
 }%%
 
 graph LR
