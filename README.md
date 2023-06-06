@@ -2,6 +2,16 @@
 
 ## Aplicación para domotizar las viviendas.
 
+#Author
+
+**JazBass**
+
+*Android Developer*
+
+All rights reserved ®
+
+[Find me on LinkedIn](https://www.linkedin.com/in/jazbass/)
+
 ### Importante
 ```
 Antes de instalar configurar en com.mch.blekot.common.Constants:
@@ -92,11 +102,7 @@ encontrar el móvil, por lo que si este error se repite reiteradas veces es prob
 problema con la manija ya que el móvil no está localizándola.
 ```
 
-#Author
-**JazBass**
-*Android Developer*
->All rights reserved ®
-[Find me on LinkedIn](https://www.linkedin.com/in/jazbass/)
+
 
 
 
