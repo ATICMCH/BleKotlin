@@ -102,6 +102,7 @@ encontrar el móvil, por lo que si este error se repite reiteradas veces es prob
 problema con la manija ya que el móvil no está localizándola.
 ```
 
+### Flujo de la app
 
 ```mermaid
 graph LR
