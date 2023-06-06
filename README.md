@@ -121,9 +121,11 @@ F -->B
 BLE -->  MANIJA[Manija]
 MANIJA -->|rdm num & battery| BLE
 
-E -> H[Welock API]
-H ->|hex| E
+E --> H[Welock API]
+H -.->|token| E
 
+E -.-> H[Welock API]
+H -->|hex| E
 
 F --> |hex| I[Manija]
 I --> |response|F
