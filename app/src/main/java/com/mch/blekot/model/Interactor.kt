@@ -9,8 +9,8 @@ import com.mch.blekot.model.ble.Ble
 import com.mch.blekot.model.welock.WeLock
 import com.mch.blekot.common.JsonManager
 import com.mch.blekot.model.socket.SocketSingleton
-import com.mch.blekot.services.micro.MicroService
-import com.mch.blekot.services.micro.Recorder
+import com.mch.blekot.model.micro.MicroService
+import com.mch.blekot.model.micro.Recorder
 
 object Interactor : ActionManagerAux {
 

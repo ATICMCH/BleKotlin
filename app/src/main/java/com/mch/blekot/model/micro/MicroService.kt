@@ -1,4 +1,4 @@
-package com.mch.blekot.services.micro
+package com.mch.blekot.model.micro
 
 import java.util.*
 import android.util.Log
@@ -7,11 +7,10 @@ import kotlinx.coroutines.*
 import kotlin.math.roundToLong
 import android.content.Context
 import android.media.MediaRecorder
-import com.mch.blekot.MainActivity
+import com.mch.blekot.views.MainActivity
 import androidx.lifecycle.Lifecycle
 import android.annotation.SuppressLint
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 
 /*
 * DECIBEL_DATA_LENGTH es la cantidad de registros que se almacenaran en el stack que guarda los

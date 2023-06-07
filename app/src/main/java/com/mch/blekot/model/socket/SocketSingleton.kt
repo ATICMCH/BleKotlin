@@ -11,10 +11,9 @@ import kotlinx.coroutines.*
 import io.socket.client.Socket
 import com.mch.blekot.common.Constants
 import android.annotation.SuppressLint
-import com.mch.blekot.MainActivity
+import com.mch.blekot.views.MainActivity
 import com.mch.blekot.common.ValidateUtil
 import com.mch.blekot.model.Interactor
-import com.mch.blekot.services.SocketService
 import com.mch.blekot.common.ProcessDataJson
 import com.mch.blekot.common.ValidateException
 import com.mch.blekot.model.ble.Ble
@@ -48,7 +47,6 @@ class SocketSingleton private constructor() {
             val dataResponse: JSONArray
             try {
                 if (isProcessActive) {
-                    Log.i(TAG, "Hay una peticion pendiente!!")
                     Interactor.sendResponseToServer(
                         Constants.CODE_MSG_PENDANT,
                         Constants.STATUS_LOCK,

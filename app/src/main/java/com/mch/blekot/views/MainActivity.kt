@@ -1,4 +1,4 @@
-package com.mch.blekot
+package com.mch.blekot.views
 
 import android.util.Log
 import android.os.Bundle
@@ -13,14 +13,15 @@ import android.Manifest.permission.*
 import com.mch.blekot.model.Interactor
 import com.mch.blekot.common.Constants
 import android.content.BroadcastReceiver
-import com.mch.blekot.services.SocketService
+import com.mch.blekot.model.socket.SocketService
 import androidx.appcompat.app.AppCompatActivity
 import com.vmadalin.easypermissions.EasyPermissions
 import com.mch.blekot.databinding.ActivityMainBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import com.mch.blekot.R
 import com.mch.blekot.model.socket.SocketSingleton
-import com.mch.blekot.services.micro.MicroService
+import com.mch.blekot.model.micro.MicroService
 
 /****
  * Project: BleKot
@@ -37,6 +38,7 @@ private const val CODE_REQUEST_PERMISSIONS = 1
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
+
     private val fragment = InfoFragment()
     private lateinit var microService: MicroService
 
@@ -49,17 +51,17 @@ class MainActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        methodRequiresTwoPermission()
+        methodRequiresPermissions()
 
         mBinding.fab.setOnClickListener { launchInfoFragment() }
         mBinding.cancelFab.setOnClickListener { onBackPressed() }
 
-        mBinding.btnLaunchScan.setOnClickListener {
-            MainScope().launch { Interactor.openLock() }
-        }
-
         launchSocketService()
 
+        /*
+        * Tomamos el path para almacenar los audios que grabaremos y lo almacenamos en Constants,
+        * lo hacemos aquí ya que es más fácil acceder al context de la app
+        * */
         Constants.destPath = applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
     }
 
@@ -94,7 +96,6 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(applicationContext, SocketService::class.java)
         startService(intent)
-
     }
 
     fun launchMicro() {
@@ -116,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-
-    private fun methodRequiresTwoPermission() {
+    //Función que pide los permisos al iniciarse la app
+    private fun methodRequiresPermissions() {
         if (!EasyPermissions.hasPermissions(
                 this,
                 ACCESS_FINE_LOCATION,
@@ -149,7 +150,6 @@ class MainActivity : AppCompatActivity() {
                     Log.d("TAG", "Main-Counter: " + intent.getStringExtra(Constants.EXTRA_COUNTER))
                 }
                 ACTION_MEMORY_EXIT -> {
-                    // Guardar info en base de datos que el servicio ha sido destruido
                     Log.d("TAG", "Servicio finalizado escucha desde MainActivity...")
                 }
             }

@@ -4,7 +4,7 @@ import java.util.*
 import android.util.Log
 import android.bluetooth.*
 import kotlinx.coroutines.*
-import com.mch.blekot.MainActivity
+import com.mch.blekot.views.MainActivity
 import com.mch.blekot.common.HexUtil
 import com.mch.blekot.model.DeviceData
 import android.bluetooth.le.ScanFilter
