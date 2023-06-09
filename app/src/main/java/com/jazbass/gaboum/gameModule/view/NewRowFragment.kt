@@ -39,11 +39,7 @@ class NewRowFragment : Fragment() {
     }
 
     private fun saveRow() {
-        for (i in 0 until mAdapter.itemCount){
-            Log.i("oldScore", "${mPlayersList[i].score}")
-            mPlayersList[i].score += mAdapter.getItemScore(i)
-            Log.i("newScore", "${mPlayersList[i].score}")
-        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

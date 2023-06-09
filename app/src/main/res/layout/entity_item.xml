@@ -39,7 +39,7 @@
             style="?android:attr/borderlessButtonStyle"/>
 
         <TextView
-            android:id="@+id/scorePlayer"
+            android:id="@+id/txtScorePlayer"
             android:layout_width="30dp"
             android:gravity="center_horizontal"
             android:layout_height="wrap_content"

@@ -15,6 +15,7 @@ class CurrentGameLisAdapter(val isRow: Boolean) :
     ListAdapter<PlayerEntity, RecyclerView.ViewHolder>(CurrentGameDiffCallback()) {
 
     private lateinit var mContext: Context
+    private val newScores = mutableMapOf<Int, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         mContext = parent.context
@@ -24,14 +25,15 @@ class CurrentGameLisAdapter(val isRow: Boolean) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val player = getItem(position)
-
-        with(holder as ViewHolder) {
-            setListener(player)
-        }
+        (holder as ViewHolder).setListener(player!!)
     }
 
-    fun getItemScore(position: Int): Int {
-        return getItem(position).score
+    fun getNewScore(position: Int):Int{
+        return newScores.getOrDefault(position,100)
+    }
+
+    public override fun getItem(i: Int): PlayerEntity? {
+        return getItem(i)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -42,26 +44,25 @@ class CurrentGameLisAdapter(val isRow: Boolean) :
                 if (!isRow) {
                     btnDecrease.visibility = View.INVISIBLE
                     btnIncrease.visibility = View.INVISIBLE
-                    scorePlayer.text = player.score.toString().trim()
+                    txtScorePlayer.text = player.score.toString().trimIndent()
                 } else{
-                    player.score = 0
 
-                    scorePlayer.text = player.score.toString()
+                    txtScorePlayer.text = newScores[adapterPosition].toString()
 
                     btnIncrease.setOnClickListener {
-                        player.score ++
-                        scorePlayer.text = player.score.toString()
+                        newScores[adapterPosition] = newScores.getOrDefault(position, 0) + 1
+                        txtScorePlayer.text = newScores[adapterPosition].toString()
                     }
 
                     btnDecrease.setOnClickListener {
-                        player.score --
-                        scorePlayer.text = player.score.toString()
+                        newScores[adapterPosition] = newScores.getOrDefault(position, 0) - 1
+                        txtScorePlayer.text = newScores[adapterPosition].toString()
                     }
                 }
-
                 this.player.text = player.name
             }
         }
+
     }
 
     class CurrentGameDiffCallback : DiffUtil.ItemCallback<PlayerEntity>() {
