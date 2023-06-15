@@ -19,12 +19,13 @@ import androidx.lifecycle.LifecycleOwner
 * evaluar la media de ruido.
 */
 
-const val DECIBEL_DATA_LENGTH = 4
-const val INTERVAL_GET_DECIBEL = 3000L //segundos (como Francia)
+private const val DECIBEL_DATA_LENGTH = 4
+private const val INTERVAL_GET_DECIBEL = 3000L // segundos(como Francia)
 
-const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
-const val EMA_FILTER = 0.6 // No tocar
+private const val RUIDO_MIN = 10 //Minimo de decibelios para comenzar a grabar
+private const val EMA_FILTER = 0.6 // No tocar
 
+private const val TAG = "MicroService"
 
 @SuppressLint("StaticFieldLeak")
 object MicroService : LifecycleOwner {
@@ -129,7 +130,7 @@ object MicroService : LifecycleOwner {
     private fun executeAction(block: suspend () -> Unit): Job {
         return GlobalScope.launch(Dispatchers.IO) {
             block()
-        } ?: return Job()
+        }
     }
 
 

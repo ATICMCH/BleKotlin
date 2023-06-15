@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 import com.mch.blekot.common.Constants
 import com.mch.blekot.model.socket.SocketSingleton
 
-const val TAG = "RECORDER"
+private const val TAG = "RECORDER"
 
 class Recorder {
 
