@@ -13,8 +13,13 @@ import android.Manifest.permission.*
 import com.mch.blekot.model.Interactor
 import com.mch.blekot.common.Constants
 import android.content.BroadcastReceiver
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import com.mch.blekot.model.socket.SocketService
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.vmadalin.easypermissions.EasyPermissions
 import com.mch.blekot.databinding.ActivityMainBinding
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -22,6 +27,9 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.mch.blekot.R
 import com.mch.blekot.model.socket.SocketSingleton
 import com.mch.blekot.model.micro.MicroService
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 
 /****
  * Project: BleKot
@@ -42,6 +50,9 @@ class MainActivity : AppCompatActivity() {
     private val fragment = InfoFragment()
     private lateinit var microService: MicroService
 
+    //Singleton
+    private val Context.dataStore by preferencesDataStore(name = "DEVICE_ID")
+
     override
     fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,12 +69,74 @@ class MainActivity : AppCompatActivity() {
 
         launchSocketService()
 
+        //onCLickListeners
+        setUpListeners()
+        askForDeviceID()
+
         /*
         * Tomamos el path para almacenar los audios que grabaremos y lo almacenamos en Constants,
         * lo hacemos aquí ya que es más fácil acceder al context de la app
         * */
         Constants.destPath = applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
     }
+
+
+    private fun askForDeviceID() {
+        executeAction {
+            if (!readDeviceID().isNullOrEmpty()) {
+                Constants.ID = readDeviceID().toString()
+                launchSocketService()
+            } else {
+                launchAlertDialog()
+            }
+        }
+    }
+
+    private fun launchAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Insterte el ID del dispositivo")
+        val editText = EditText(this)
+        builder.setView(editText)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val deviceId = editText.text.toString()
+            executeAction {
+                saveDeviceID(deviceId)
+            }
+        }
+        builder.show()
+    }
+
+    private fun setUpListeners() {
+        with(mBinding) {
+            fab.setOnClickListener { launchInfoFragment() }
+            cancelFab.setOnClickListener { onBackPressed() }
+            btnLaunchScan.setOnClickListener {
+                MainScope().launch { Interactor.openLock() }
+            }
+        }
+    }
+
+    private suspend fun saveDeviceID(id: String) {
+        val deviceIdKey = stringPreferencesKey(Constants.DEVICE_ID_KEY)
+        dataStore.edit { preferences ->
+            preferences[deviceIdKey] = id
+        }
+        readDeviceID().also {
+            if (!it.isNullOrEmpty()) {
+                Constants.ID = it
+                Log.i("DeviceID", it)
+                launchSocketService()
+            }
+        }
+    }
+
+    private suspend fun readDeviceID(): String? {
+        val deviceIdKey = stringPreferencesKey(Constants.DEVICE_ID_KEY)
+        dataStore.data.first().also { preferences ->
+            return preferences[deviceIdKey]
+        }
+    }
+
 
     private fun launchInfoFragment() {
 
@@ -100,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 
     fun launchMicro() {
         if (SocketSingleton.socketInstance!!.isConnected) {
-            microService = MicroService.apply{
+            microService = MicroService.apply {
                 setContext(applicationContext)
                 setUpRecorder()
             }
