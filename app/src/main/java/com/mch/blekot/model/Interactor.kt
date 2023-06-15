@@ -12,7 +12,7 @@ import com.mch.blekot.model.socket.SocketSingleton
 import com.mch.blekot.model.micro.MicroService
 import com.mch.blekot.model.micro.Recorder
 
-object Interactor : ActionManagerAux {
+object Interactor : InteractorAux {
 
     private var mAction = -1
     private var mRndNumber: String? = null

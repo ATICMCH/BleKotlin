@@ -14,9 +14,11 @@ import com.mch.blekot.model.Interactor
 import com.mch.blekot.common.Constants
 import android.content.BroadcastReceiver
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import com.mch.blekot.model.socket.SocketService
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.marginLeft
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -62,22 +64,21 @@ class MainActivity : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        /*
+        * Tomamos el path para almacenar los audios que grabaremos y lo almacenamos en Constants,
+        * lo hacemos aquí ya que es más fácil acceder al context de la app
+        */
+        Constants.destPath = applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
+
         methodRequiresPermissions()
 
         mBinding.fab.setOnClickListener { launchInfoFragment() }
         mBinding.cancelFab.setOnClickListener { onBackPressed() }
 
-        launchSocketService()
-
         //onCLickListeners
         setUpListeners()
         askForDeviceID()
 
-        /*
-        * Tomamos el path para almacenar los audios que grabaremos y lo almacenamos en Constants,
-        * lo hacemos aquí ya que es más fácil acceder al context de la app
-        * */
-        Constants.destPath = applicationContext?.getExternalFilesDir(null)?.absolutePath ?: ""
     }
 
 
@@ -96,8 +97,9 @@ class MainActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Insterte el ID del dispositivo")
         val editText = EditText(this)
+
         builder.setView(editText)
-        builder.setPositiveButton("OK") { dialog, _ ->
+        builder.setPositiveButton("OK") { _, _ ->
             val deviceId = editText.text.toString()
             executeAction {
                 saveDeviceID(deviceId)
@@ -133,7 +135,6 @@ class MainActivity : AppCompatActivity() {
             return preferences[deviceIdKey]
         }
     }
-
 
     private fun launchInfoFragment() {
 
@@ -227,7 +228,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun executeAction(block: suspend () -> Unit): Job {
-        return GlobalScope.launch { block() }
+        return MainScope().launch { block() }
     }
 
     init {
