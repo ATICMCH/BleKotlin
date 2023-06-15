@@ -110,9 +110,6 @@ class MainActivity : AppCompatActivity() {
         with(mBinding) {
             fab.setOnClickListener { launchInfoFragment() }
             cancelFab.setOnClickListener { onBackPressed() }
-            btnLaunchScan.setOnClickListener {
-                MainScope().launch { Interactor.openLock() }
-            }
         }
     }
 
@@ -227,6 +224,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun executeAction(block: suspend () -> Unit): Job {
+        return GlobalScope.launch { block() }
     }
 
     init {
